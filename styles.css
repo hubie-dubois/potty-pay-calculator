@@ -626,6 +626,18 @@ input[type="radio"] {
   }
 }
 
+@media (max-width: 420px) {
+  .leaderboard-tabs .chip {
+    padding: 0.45rem 0.55rem;
+  }
+
+  .leaderboard-tabs-metrics .lb-metric {
+    font-size: 0.84rem;
+    line-height: 1.15;
+    min-height: 44px;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --bg-1: #1c1813;
