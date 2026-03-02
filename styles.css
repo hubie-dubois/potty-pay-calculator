@@ -422,6 +422,27 @@ input[type="radio"] {
   margin-top: 0.8rem;
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.leaderboard-tabs .chip {
+  margin-top: 0;
+  min-width: 0;
+  white-space: normal;
+  text-align: center;
+}
+
+.leaderboard-tabs-period .chip {
+  flex: 0 1 auto;
+}
+
+.leaderboard-tabs-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.leaderboard-tabs-metrics .chip {
+  width: 100%;
 }
 
 .lb-tab.active {
@@ -589,6 +610,25 @@ input[type="radio"] {
   nav a {
     padding: 0.35rem 0.6rem;
     font-size: 0.9rem;
+  }
+
+  .leaderboard-tabs-period .lb-tab {
+    flex: 1 1 calc(50% - 0.25rem);
+  }
+
+  .leaderboard-tabs-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .leaderboard-tabs-metrics .lb-metric {
+    font-size: 0.9rem;
+    line-height: 1.2;
+  }
+}
+
+@media (max-width: 420px) {
+  .leaderboard-tabs-metrics {
+    grid-template-columns: 1fr;
   }
 }
 
