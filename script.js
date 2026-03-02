@@ -555,52 +555,116 @@ function initFactsPage() {
   const featured = document.getElementById("featuredFact");
   const shuffleBtn = document.getElementById("shuffleFacts");
   const randomBtn = document.getElementById("randomFact");
-  const canvas = document.getElementById("pottyCanvas");
+  const posterCard = document.getElementById("posterCard");
+  const posterBadge = document.getElementById("posterBadge");
+  const posterTitle = document.getElementById("posterTitle");
+  const posterEmoji = document.getElementById("posterEmoji");
+  const posterSubtitle = document.getElementById("posterSubtitle");
   const regenArtBtn = document.getElementById("regenArt");
 
-  if (!grid || !featured || !shuffleBtn || !randomBtn || !canvas) return;
+  if (!grid || !featured || !shuffleBtn || !randomBtn || !posterCard) return;
 
   const facts = [
-    "Your kidneys filter roughly 180 liters of fluid each day.",
-    "Most adults pee around 6 to 8 times in 24 hours.",
-    "The color of urine can shift based on hydration, foods, and vitamins.",
-    "The colon's major job includes reclaiming water before stool exits the body.",
-    "A normal bowel pattern can range from three times a day to three times a week.",
-    "The Bristol Stool Chart is a real clinical tool for discussing stool consistency.",
-    "The urge to poop often increases after meals due to the gastrocolic reflex.",
-    "Squatting posture can make bowel movements easier for some people.",
-    "Fiber helps bulk stool and can support easier bathroom routines.",
-    "Hydration and movement are common lifestyle levers for bowel regularity.",
-    "Coffee can stimulate colon activity in some people.",
-    "Stress can affect gut function and bathroom timing.",
-    "Gut bacteria influence digestion, gas production, and stool traits.",
-    "Stool is mostly water plus bacteria, fiber residue, and waste products.",
-    "Urine is mostly water with dissolved electrolytes and metabolic byproducts.",
-    "Bladder capacity differs by person and can change with habits over time.",
-    "Ignoring bathroom urges repeatedly can be uncomfortable and disruptive.",
-    "Travel can temporarily alter bowel habits because routines, food, and sleep change.",
-    "Certain foods like beets can temporarily change urine or stool color.",
-    "Pale yellow urine is commonly viewed as a practical hydration target for many people.",
-    "Physical activity can support healthy digestion and bowel movement frequency.",
-    "Sleep quality can influence digestive rhythms the next day.",
-    "Handwashing after bathroom use remains one of the highest-impact hygiene habits.",
-    "Toilet design has evolved for thousands of years across many cultures.",
-    "Modern sewer systems transformed urban public health outcomes.",
-    "Your gut and brain communicate constantly through neural and hormonal pathways.",
-    "Meal timing can affect when bowel urges happen during the day.",
-    "Lactose intolerance can lead to bathroom urgency after dairy for some people.",
-    "Color, frequency, and comfort trends can be more useful than one-off events.",
-    "Bathroom breaks can restore focus and reduce prolonged sitting time.",
-    "Brief walks to and from the restroom can improve circulation during desk-heavy days.",
-    "Cold weather can increase urination frequency for some people.",
-    "Spicy foods may speed things up for sensitive digestive systems.",
-    "Hydration needs vary by climate, activity level, and body size.",
-    "Morning routines often shape bowel timing more than people realize.",
-    "A consistent eating pattern can make bathroom timing more predictable."
+    "The first known flushing toilet design is over 400 years old, and we still celebrate every successful flush.",
+    "Your bladder sends polite warning signals first, then rapidly escalates to hostile urgency.",
+    "Coffee has started more emergency bathroom sprints than most cardio programs.",
+    "The office bathroom line is directly proportional to the number of people who just had iced coffee.",
+    "Your gut absolutely has main-character energy after a risky burrito.",
+    "The phrase 'quick bathroom break' has never been more optimistic than before opening social media.",
+    "A good bathroom fan can sound like a helicopter preparing for takeoff.",
+    "Humans are one of the few species that judge toilet paper quality this emotionally.",
+    "You can tell a lot about a workplace by how soft the toilet paper is.",
+    "Most people have a preferred stall and pretend they do not.",
+    "A dramatic stomach rumble in a silent restroom is a universal character-building moment.",
+    "Pee color can shift with hydration, vitamins, and your fearless commitment to energy drinks.",
+    "Your colon is basically a logistics manager handling difficult deliveries.",
+    "The phrase 'trust your gut' is sometimes literal and urgent.",
+    "Phones have extended average bathroom break durations more than any invention since indoor plumbing.",
+    "A suspiciously quiet restroom usually means someone is fighting for their life in stall three.",
+    "Bidets are basically pressure washers with diplomacy.",
+    "Fiber is the unsung hero of every smooth morning routine.",
+    "Your digestive system can absolutely hold grudges about yesterday's food choices.",
+    "The bathroom mirror has heard more pep talks than most managers.",
+    "Public restroom hand dryers can sound like a tiny jet engine.",
+    "Hydration is cool until your commute has no exits.",
+    "The gut-brain connection explains why stress can send you speed-walking to the restroom.",
+    "The workplace bathroom is a weird blend of privacy, strategy, and acoustics.",
+    "There is no bolder optimism than entering a one-stall restroom with a laptop in hand.",
+    "A post-meeting bathroom break is basically a system reboot.",
+    "Some people can drink milk. Some people choose violence and then regret it.",
+    "A good flush is one of life's most underrated victories.",
+    "Morning coffee and morning bowel movements are business partners.",
+    "Toilet paper orientation arguments have destroyed friendships.",
+    "Cold weather can make you pee more and question your life choices.",
+    "The phrase 'brb restroom' hides far more drama than it appears to.",
+    "Your best ideas often arrive either in the shower or on the toilet. Science is still processing this.",
+    "The longer the meeting, the more heroic the bladder control stories.",
+    "A clean restroom is the closest thing to office luxury.",
+    "Stomach bubbles during a quiet elevator ride are never a good omen.",
+    "Hydration, fiber, and movement remain the holy trinity of bathroom harmony.",
+    "You can absolutely have a favorite sink. We all do.",
+    "The emergency courtesy flush is a high-skill tactical maneuver.",
+    "There is no confidence like leaving a restroom knowing it smells exactly normal.",
+    "The sentence 'I should not have eaten that' is usually followed by speed.",
+    "Every office has one restroom everyone avoids for mysterious reasons.",
+    "A well-timed bathroom break can save you from replying-all mistakes.",
+    "Toilets are civilization's MVP and still somehow underappreciated.",
+    "The words 'out of order' on a restroom door can trigger primal panic.",
+    "Most people can identify a cheap paper towel from six feet away.",
+    "A strategic restroom walk can reset your mood faster than doomscrolling.",
+    "Digestive peace is priceless, but this site still calculates it in dollars.",
+    "Your pee schedule on travel days is mostly controlled by traffic and bad decisions.",
+    "The sound of someone aggressively unrolling toilet paper is pure cinematic tension.",
+    "Nothing humbles a person faster than a bathroom with no hooks, no shelf, and no mercy.",
+    "The human body is 60% water and 100% dramatic about bathroom timing."
   ];
 
   const factIndex = { value: -1 };
-  const artCtx = canvas.getContext("2d");
+  const posterIndex = { value: -1 };
+  const posterThemes = [
+    {
+      badge: "THRONE CERTIFIED",
+      title: "Peak Flush Performance",
+      emoji: "🚽⚡💩",
+      subtitle: "Respect the process. Trust the flush.",
+      style: "theme-a"
+    },
+    {
+      badge: "HYDRATION DIVISION",
+      title: "Pee Like A Champion",
+      emoji: "💧🏆🚰",
+      subtitle: "Sip water. Walk proud. Return victorious.",
+      style: "theme-b"
+    },
+    {
+      badge: "FIBER TASK FORCE",
+      title: "Smooth Logistics",
+      emoji: "🥦📦🚽",
+      subtitle: "Gut operations running on schedule.",
+      style: "theme-c"
+    },
+    {
+      badge: "STALL CLUB",
+      title: "Do Not Disturb",
+      emoji: "🚪🧻🤫",
+      subtitle: "Great thinking is happening in here.",
+      style: "theme-d"
+    },
+    {
+      badge: "PORCELAIN LEAGUE",
+      title: "Flush, Wash, Prosper",
+      emoji: "🫧👐🚽",
+      subtitle: "A classic sequence for modern legends.",
+      style: "theme-e"
+    },
+    {
+      badge: "COFFEE CONSEQUENCES",
+      title: "Brewed For Speed",
+      emoji: "☕💨💩",
+      subtitle: "Fast starts. Faster bathroom pivots.",
+      style: "theme-f"
+    }
+  ];
 
   function renderFactCards(shuffled) {
     grid.innerHTML = "";
@@ -622,45 +686,25 @@ function initFactsPage() {
     featured.textContent = choice.value;
   }
 
-  function drawArt() {
-    if (!artCtx) return;
+  function generatePoster() {
+    const choice = pickNonRepeatingRandom(posterThemes, posterIndex).value;
+    if (!choice) return;
 
-    const w = canvas.width;
-    const h = canvas.height;
-
-    const bg = artCtx.createLinearGradient(0, 0, w, h);
-    bg.addColorStop(0, "#f5df87");
-    bg.addColorStop(0.5, "#e6bf6f");
-    bg.addColorStop(1, "#c08e5c");
-    artCtx.fillStyle = bg;
-    artCtx.fillRect(0, 0, w, h);
-
-    const icons = ["🚽", "💩", "🧻", "💧", "🫧", "🚰"];
-
-    for (let i = 0; i < 95; i += 1) {
-      const icon = icons[Math.floor(Math.random() * icons.length)];
-      const x = Math.random() * w;
-      const y = Math.random() * h;
-      const size = 18 + Math.random() * 40;
-      const alpha = 0.25 + Math.random() * 0.65;
-
-      artCtx.save();
-      artCtx.translate(x, y);
-      artCtx.rotate((Math.random() - 0.5) * 0.6);
-      artCtx.globalAlpha = alpha;
-      artCtx.font = `${size}px "Apple Color Emoji", "Segoe UI Emoji", sans-serif`;
-      artCtx.fillText(icon, 0, 0);
-      artCtx.restore();
-    }
+    posterCard.classList.remove("theme-a", "theme-b", "theme-c", "theme-d", "theme-e", "theme-f");
+    posterCard.classList.add(choice.style);
+    if (posterBadge) posterBadge.textContent = choice.badge;
+    if (posterTitle) posterTitle.textContent = choice.title;
+    if (posterEmoji) posterEmoji.textContent = choice.emoji;
+    if (posterSubtitle) posterSubtitle.textContent = choice.subtitle;
   }
 
   shuffleBtn.addEventListener("click", shuffleFacts);
   randomBtn.addEventListener("click", showRandomFact);
-  if (regenArtBtn) regenArtBtn.addEventListener("click", drawArt);
+  if (regenArtBtn) regenArtBtn.addEventListener("click", generatePoster);
 
   shuffleFacts();
   showRandomFact();
-  drawArt();
+  generatePoster();
 }
 
 function initRevealStagger() {

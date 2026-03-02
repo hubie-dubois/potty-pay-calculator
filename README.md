@@ -22,9 +22,9 @@ An interactive, multi-page static website for estimating how much people earn wh
   - Scenario A vs Scenario B showdown
   - Annual earnings delta and winner indicator
 - Facts page (`facts.html`)
-  - 30+ poop/pee/toilet facts
+  - 50+ poop/pee/toilet facts in a funnier style
   - Shuffle + random featured fact
-  - Generative emoji potty art canvas
+  - Generative potty poster generator
 
 ## Local development
 
