@@ -527,6 +527,12 @@ function initLeaderboard() {
       return;
     }
     const metrics = Engine.computeMetrics(data);
+    const legacyMinutesPerVisit =
+      data.visitsPerDay > 0
+        ? ((data.poopMinutesPerVisit * data.poopVisitsPerDay) +
+            (data.peeMinutesPerVisit * Math.max(data.visitsPerDay - data.poopVisitsPerDay, 0))) /
+          data.visitsPerDay
+        : data.peeMinutesPerVisit;
     const payload = {
       display_name: displayName,
       region,
@@ -535,6 +541,7 @@ function initLeaderboard() {
       annual_salary: Number(data.annualSalary || 0),
       hours_per_week: Number(data.hoursPerWeek),
       workdays_per_week: Number(data.workdaysPerWeek),
+      minutes_per_visit: Number(legacyMinutesPerVisit),
       poop_minutes_per_visit: Number(data.poopMinutesPerVisit),
       pee_minutes_per_visit: Number(data.peeMinutesPerVisit),
       visits_per_day: Number(data.visitsPerDay),
