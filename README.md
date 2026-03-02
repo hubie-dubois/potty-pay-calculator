@@ -25,8 +25,7 @@ An interactive, multi-page static website for estimating how much people earn wh
   - 50+ poop/pee/toilet facts in a funnier style
   - Shuffle + random featured fact with category filters
   - Share/copy for featured facts
-  - Generative potty poster generator
-  - Optional darkly cursed poster mode
+  - Generative darkly cursed poster generator (expanded theme set)
 - Theme system
   - Automatically follows visitor/browser `prefers-color-scheme` (light/dark)
 
