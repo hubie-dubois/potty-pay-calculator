@@ -565,6 +565,7 @@ function initFactsPage() {
   const posterEmoji = document.getElementById("posterEmoji");
   const posterSubtitle = document.getElementById("posterSubtitle");
   const cursedMode = document.getElementById("cursedMode");
+  const cursedHint = document.getElementById("cursedHint");
   const regenArtBtn = document.getElementById("regenArt");
   const sharePosterBtn = document.getElementById("sharePoster");
 
@@ -672,6 +673,34 @@ function initFactsPage() {
       emoji: "☕💨💩",
       subtitle: "Fast starts. Faster bathroom pivots.",
       style: "theme-f"
+    },
+    {
+      badge: "HYGIENE HERO",
+      title: "Wash Like You Mean It",
+      emoji: "🫧👐🏅",
+      subtitle: "Clean hands. Clear conscience. Continue mission.",
+      style: "theme-g"
+    },
+    {
+      badge: "STALL SCHOLAR",
+      title: "Think Big In Small Spaces",
+      emoji: "🧠🚽📈",
+      subtitle: "Many strategic breakthroughs begin in here.",
+      style: "theme-h"
+    },
+    {
+      badge: "WEEKEND MODE",
+      title: "No Meetings, Just Flow",
+      emoji: "😌🧻🌤️",
+      subtitle: "A gentler schedule for your overworked gut.",
+      style: "theme-i"
+    },
+    {
+      badge: "HYDRATION ALLIANCE",
+      title: "Sip, Step, Repeat",
+      emoji: "🚰💧🚶",
+      subtitle: "Hydration with tactical restroom confidence.",
+      style: "theme-j"
     }
   ];
   const cursedPosterThemes = [
@@ -702,6 +731,34 @@ function initFactsPage() {
       emoji: "🌀🚽🔮",
       subtitle: "It predicted your coffee decisions.",
       style: "theme-cursed-d"
+    },
+    {
+      badge: "MIDNIGHT FACILITY",
+      title: "Do Not Enter Stall Seven",
+      emoji: "🌒🚪⛔",
+      subtitle: "The echo in there says your first name.",
+      style: "theme-cursed-e"
+    },
+    {
+      badge: "SEWER PROPHECY",
+      title: "The Pipes Remember",
+      emoji: "🫗🧻🕯️",
+      subtitle: "Every flush writes another chapter.",
+      style: "theme-cursed-f"
+    },
+    {
+      badge: "LAVATORY HEX",
+      title: "Mirror Talks Back",
+      emoji: "🪞😶‍🌫️🚽",
+      subtitle: "You asked for motivation. It offered warnings.",
+      style: "theme-cursed-g"
+    },
+    {
+      badge: "FINAL HAND DRYER",
+      title: "The Wind Is Not Natural",
+      emoji: "🌬️👁️🫧",
+      subtitle: "Some noises should stay in folklore.",
+      style: "theme-cursed-h"
     }
   ];
 
@@ -774,10 +831,18 @@ function initFactsPage() {
       "theme-d",
       "theme-e",
       "theme-f",
+      "theme-g",
+      "theme-h",
+      "theme-i",
+      "theme-j",
       "theme-cursed-a",
       "theme-cursed-b",
       "theme-cursed-c",
-      "theme-cursed-d"
+      "theme-cursed-d",
+      "theme-cursed-e",
+      "theme-cursed-f",
+      "theme-cursed-g",
+      "theme-cursed-h"
     );
     posterCard.classList.add(choice.style);
     if (posterBadge) posterBadge.textContent = choice.badge;
@@ -800,7 +865,16 @@ function initFactsPage() {
     });
   }
   if (regenArtBtn) regenArtBtn.addEventListener("click", generatePoster);
-  if (cursedMode) cursedMode.addEventListener("change", generatePoster);
+  if (cursedMode) {
+    cursedMode.addEventListener("change", () => {
+      if (cursedHint) {
+        cursedHint.textContent = cursedMode.checked
+          ? "Cursed mode ON: posters now use ominous lore and darker visuals."
+          : "Cursed mode OFF: posters use the regular goofy motivational set.";
+      }
+      generatePoster();
+    });
+  }
   if (sharePosterBtn) {
     sharePosterBtn.addEventListener("click", () => {
       const text = `${posterTitle ? posterTitle.textContent : ""} — ${posterSubtitle ? posterSubtitle.textContent : ""}`;
