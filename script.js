@@ -659,6 +659,7 @@ function initFactsPage() {
     const choice = pickNonRepeatingRandom(getFactsForCategory(), ref);
     factIndexByCategory[category] = ref.value;
     featured.textContent = choice.value;
+    setStatus("New random fact loaded.");
   }
 
   async function shareText(text, label) {
@@ -668,23 +669,36 @@ function initFactsPage() {
       } else if (navigator.clipboard) {
         await navigator.clipboard.writeText(text);
       } else {
-        throw new Error("Clipboard not supported");
+        window.prompt("Copy this text:", text);
       }
       setStatus(`${label} shared/copied.`);
     } catch (error) {
-      setStatus(`Could not share ${label.toLowerCase()}.`);
+      try {
+        window.prompt("Copy this text:", text);
+        setStatus(`${label} ready to copy.`);
+      } catch (fallbackError) {
+        setStatus(`Could not share ${label.toLowerCase()}.`);
+      }
     }
   }
 
-  shuffleBtn.addEventListener("click", shuffleFacts);
-  randomBtn.addEventListener("click", showRandomFact);
+  shuffleBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    shuffleFacts();
+    setStatus("Facts shuffled.");
+  });
+  randomBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    showRandomFact();
+  });
   categorySelect.addEventListener("change", () => {
     shuffleFacts();
     showRandomFact();
     setStatus(`Loaded ${categorySelect.options[categorySelect.selectedIndex].text}.`);
   });
   if (shareFactBtn) {
-    shareFactBtn.addEventListener("click", () => {
+    shareFactBtn.addEventListener("click", (event) => {
+      event.preventDefault();
       shareText(`Potty Fact: ${featured.textContent}`, "Fact");
     });
   }
