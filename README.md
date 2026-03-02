@@ -27,9 +27,15 @@ An interactive, multi-page static website for estimating how much people earn wh
   - Share/copy for featured facts
   - Daily potty fortune generator
 - Leaderboard page (`leaderboard.html`)
-  - Dedicated global leaderboard page
+  - Dedicated global leaderboard page (rankings shown at top)
   - Standalone submission profile (hourly/salary + schedule inputs)
   - All-time and monthly ranking tabs
+  - Category rankings:
+    - Yearly earnings
+    - Weekly earnings
+    - Toilet time per year
+    - Total visits per day
+    - Poop breaks per day
 - Theme system
   - Automatically follows visitor/browser `prefers-color-scheme` (light/dark)
 
@@ -57,6 +63,13 @@ npm test
 Notes:
 - Leaderboard scores are calculated in the database using generated columns (`score_weekly`, `score_yearly`) so client submissions cannot directly set final score fields.
 - Current anti-spam protection includes strict database input checks plus a frontend 15-second submit cooldown.
+- The current #1 person is whichever row has the highest value for the currently selected ranking metric.
+
+### Existing project migration
+
+If your Supabase table already exists from earlier versions, run:
+
+`leaderboard-migration-v2.sql`
 
 ## Fortune system
 

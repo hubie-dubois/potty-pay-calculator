@@ -37,9 +37,41 @@
       </section>
 
       <section id="leaderboard" class="panel reveal">
-        <h2>Submit Your Score</h2>
-        <p class="small-note">This page has its own input profile so leaderboard submissions work independently.</p>
+        <h2>Rankings</h2>
+        <p class="small-note">#1 is selected by whichever ranking metric is currently active.</p>
+        <div class="leaderboard-tabs" role="tablist" aria-label="Leaderboard period tabs">
+          <button class="chip lb-tab active" data-period="all" role="tab" aria-selected="true" type="button">All-time</button>
+          <button class="chip lb-tab" data-period="month" role="tab" aria-selected="false" type="button">This month</button>
+        </div>
+        <div class="leaderboard-tabs" role="tablist" aria-label="Leaderboard metric tabs">
+          <button class="chip lb-metric active" data-metric="score_yearly" type="button">Yearly Earnings</button>
+          <button class="chip lb-metric" data-metric="score_weekly" type="button">Weekly Earnings</button>
+          <button class="chip lb-metric" data-metric="bathroom_minutes_yearly" type="button">Toilet Time/Year</button>
+          <button class="chip lb-metric" data-metric="visits_per_day" type="button">Visits/Day</button>
+          <button class="chip lb-metric" data-metric="poop_visits_per_day" type="button">Poop Breaks/Day</button>
+        </div>
 
+        <div class="table-wrap">
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Region</th>
+                <th id="lbMetricHeader">Yearly Earnings</th>
+                <th>Updated</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboardRows">
+              <tr>
+                <td colspan="5">Configure Supabase to load the global leaderboard.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Submit Your Score</h3>
+        <p class="small-note">This page has its own input profile so leaderboard submissions work independently.</p>
         <form id="leaderboardForm" class="leaderboard-form-wide" novalidate>
           <fieldset class="toggle-row">
             <legend>Pay type</legend>
@@ -81,6 +113,10 @@
               <input id="lbVisitsPerDay" type="number" min="1" max="20" step="1" value="3" required />
             </label>
             <label>
+              Poop visits per workday
+              <input id="lbPoopVisitsPerDay" type="number" min="0" max="20" step="1" value="1" required />
+            </label>
+            <label>
               Weeks worked per year
               <input id="lbWeeksPerYear" type="number" min="1" max="52" step="1" value="50" required />
             </label>
@@ -89,31 +125,6 @@
           <button type="submit" class="btn">Submit Score</button>
           <p id="lbMessage" class="small-note" role="status" aria-live="polite"></p>
         </form>
-
-        <h3>Rankings</h3>
-        <div class="leaderboard-tabs" role="tablist" aria-label="Leaderboard period tabs">
-          <button class="chip lb-tab active" data-period="all" role="tab" aria-selected="true" type="button">All-time</button>
-          <button class="chip lb-tab" data-period="month" role="tab" aria-selected="false" type="button">This month</button>
-        </div>
-
-        <div class="table-wrap">
-          <table class="leaderboard-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Region</th>
-                <th>Yearly</th>
-                <th>Updated</th>
-              </tr>
-            </thead>
-            <tbody id="leaderboardRows">
-              <tr>
-                <td colspan="5">Configure Supabase to load the global leaderboard.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </section>
     </main>
 

@@ -354,6 +354,8 @@ function initLeaderboard() {
   const nameInput = document.getElementById("lbName");
   const regionInput = document.getElementById("lbRegion");
   const tabs = Array.from(document.querySelectorAll(".lb-tab"));
+  const metricTabs = Array.from(document.querySelectorAll(".lb-metric"));
+  const metricHeader = document.getElementById("lbMetricHeader");
 
   const supabase = getSupabaseClient();
   let activePeriod = "all";
@@ -366,6 +368,7 @@ function initLeaderboard() {
   const lbWorkdaysPerWeek = document.getElementById("lbWorkdaysPerWeek");
   const lbMinutesPerVisit = document.getElementById("lbMinutesPerVisit");
   const lbVisitsPerDay = document.getElementById("lbVisitsPerDay");
+  const lbPoopVisitsPerDay = document.getElementById("lbPoopVisitsPerDay");
   const lbWeeksPerYear = document.getElementById("lbWeeksPerYear");
 
   const hasStandaloneProfile =
@@ -374,7 +377,31 @@ function initLeaderboard() {
     lbWorkdaysPerWeek &&
     lbMinutesPerVisit &&
     lbVisitsPerDay &&
+    lbPoopVisitsPerDay &&
     lbWeeksPerYear;
+  let activeMetric = "score_yearly";
+  const metricMap = {
+    score_yearly: {
+      label: "Yearly Earnings",
+      render: (entry) => Engine.money(Number(entry.score_yearly || 0))
+    },
+    score_weekly: {
+      label: "Weekly Earnings",
+      render: (entry) => Engine.money(Number(entry.score_weekly || 0))
+    },
+    bathroom_minutes_yearly: {
+      label: "Toilet Time/Year",
+      render: (entry) => `${(Number(entry.bathroom_minutes_yearly || 0) / 60).toFixed(1)} h`
+    },
+    visits_per_day: {
+      label: "Visits/Day",
+      render: (entry) => Number(entry.visits_per_day || 0).toFixed(1)
+    },
+    poop_visits_per_day: {
+      label: "Poop Breaks/Day",
+      render: (entry) => Number(entry.poop_visits_per_day || 0).toFixed(1)
+    }
+  };
 
   function setMessage(text) {
     if (msg) msg.textContent = text;
@@ -404,12 +431,15 @@ function initLeaderboard() {
       workdaysPerWeek: Engine.readNum(lbWorkdaysPerWeek.value),
       minutesPerVisit: Engine.readNum(lbMinutesPerVisit.value),
       visitsPerDay: Engine.readNum(lbVisitsPerDay.value),
+      poopVisitsPerDay: Engine.readNum(lbPoopVisitsPerDay.value),
       weeksPerYear: Engine.readNum(lbWeeksPerYear.value)
     };
     return data;
   }
 
   function setRows(data) {
+    const metric = metricMap[activeMetric] || metricMap.score_yearly;
+    if (metricHeader) metricHeader.textContent = metric.label;
     if (!data.length) {
       rows.innerHTML = '<tr><td colspan="5">No entries yet. Be the first legend.</td></tr>';
       return;
@@ -419,7 +449,7 @@ function initLeaderboard() {
     data.forEach((entry, idx) => {
       const tr = document.createElement("tr");
       const when = new Date(entry.updated_at).toLocaleDateString();
-      tr.innerHTML = `<td>${idx + 1}</td><td>${entry.display_name}</td><td>${entry.region || "-"}</td><td>${Engine.money(Number(entry.score_yearly || 0))}</td><td>${when}</td>`;
+      tr.innerHTML = `<td>${idx + 1}</td><td>${entry.display_name}</td><td>${entry.region || "-"}</td><td>${metric.render(entry)}</td><td>${when}</td>`;
       rows.appendChild(tr);
     });
   }
@@ -432,8 +462,8 @@ function initLeaderboard() {
 
     let query = supabase
       .from("leaderboard_entries")
-      .select("display_name,region,score_yearly,updated_at")
-      .order("score_yearly", { ascending: false })
+      .select("display_name,region,score_yearly,score_weekly,bathroom_minutes_yearly,visits_per_day,poop_visits_per_day,updated_at")
+      .order(activeMetric, { ascending: false })
       .limit(25);
 
     if (activePeriod === "month") {
@@ -489,6 +519,14 @@ function initLeaderboard() {
       setMessage("No calculator profile found for submission.");
       return;
     }
+    if (!Number.isFinite(data.poopVisitsPerDay) || data.poopVisitsPerDay < 0) {
+      setMessage("Poop visits per workday must be 0 or greater.");
+      return;
+    }
+    if (data.poopVisitsPerDay > data.visitsPerDay) {
+      setMessage("Poop visits per workday cannot be greater than total visits per workday.");
+      return;
+    }
 
     const metrics = Engine.computeMetrics(data);
     const payload = {
@@ -501,6 +539,7 @@ function initLeaderboard() {
       workdays_per_week: Number(data.workdaysPerWeek),
       minutes_per_visit: Number(data.minutesPerVisit),
       visits_per_day: Number(data.visitsPerDay),
+      poop_visits_per_day: Number(data.poopVisitsPerDay),
       weeks_per_year: Number(data.weeksPerYear)
     };
 
@@ -527,6 +566,14 @@ function initLeaderboard() {
       tab.classList.add("active");
       tab.setAttribute("aria-selected", "true");
       activePeriod = tab.dataset.period;
+      loadLeaderboard();
+    });
+  });
+  metricTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      metricTabs.forEach((t) => t.classList.remove("active"));
+      tab.classList.add("active");
+      activeMetric = tab.dataset.metric || "score_yearly";
       loadLeaderboard();
     });
   });

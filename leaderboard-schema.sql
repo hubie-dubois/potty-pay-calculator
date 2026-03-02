@@ -15,6 +15,7 @@ create table if not exists public.leaderboard_entries (
   workdays_per_week numeric(4,2) not null check (workdays_per_week > 0 and workdays_per_week <= 7),
   minutes_per_visit numeric(5,2) not null check (minutes_per_visit > 0 and minutes_per_visit <= 180),
   visits_per_day numeric(5,2) not null check (visits_per_day > 0 and visits_per_day <= 20),
+  poop_visits_per_day numeric(5,2) not null default 0 check (poop_visits_per_day >= 0 and poop_visits_per_day <= visits_per_day),
   weeks_per_year numeric(5,2) not null check (weeks_per_year > 0 and weeks_per_year <= 52),
   -- server-side computed values
   score_weekly numeric generated always as (
@@ -36,6 +37,9 @@ create table if not exists public.leaderboard_entries (
         end
       ) / 60.0
     ) * minutes_per_visit * visits_per_day * workdays_per_week * weeks_per_year
+  ) stored,
+  bathroom_minutes_yearly numeric generated always as (
+    minutes_per_visit * visits_per_day * workdays_per_week * weeks_per_year
   ) stored,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
@@ -75,5 +79,11 @@ with check (true);
 
 create index if not exists idx_leaderboard_entries_score_yearly_desc
   on public.leaderboard_entries (score_yearly desc);
+create index if not exists idx_leaderboard_entries_score_weekly_desc
+  on public.leaderboard_entries (score_weekly desc);
+create index if not exists idx_leaderboard_entries_bathroom_minutes_yearly_desc
+  on public.leaderboard_entries (bathroom_minutes_yearly desc);
+create index if not exists idx_leaderboard_entries_poop_visits_per_day_desc
+  on public.leaderboard_entries (poop_visits_per_day desc);
 create index if not exists idx_leaderboard_entries_updated_at_desc
   on public.leaderboard_entries (updated_at desc);

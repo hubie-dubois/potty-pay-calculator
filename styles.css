@@ -425,6 +425,12 @@ input[type="radio"] {
   border-color: transparent;
 }
 
+.lb-metric.active {
+  background: var(--teal);
+  color: #fff;
+  border-color: transparent;
+}
+
 .table-wrap {
   margin-top: 0.75rem;
   overflow-x: auto;
