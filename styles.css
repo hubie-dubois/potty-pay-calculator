@@ -23,6 +23,11 @@ body {
   padding: 0;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   font-family: "Space Grotesk", sans-serif;
   color: var(--ink);
@@ -420,9 +425,7 @@ input[type="radio"] {
 
 .leaderboard-tabs {
   margin-top: 0.8rem;
-  display: flex;
   gap: 0.5rem;
-  flex-wrap: wrap;
 }
 
 .leaderboard-tabs .chip {
@@ -433,12 +436,17 @@ input[type="radio"] {
 }
 
 .leaderboard-tabs-period .chip {
-  flex: 0 1 auto;
+  width: 100%;
+}
+
+.leaderboard-tabs-period {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .leaderboard-tabs-metrics {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(10rem, 100%), 1fr));
 }
 
 .leaderboard-tabs-metrics .chip {
@@ -612,23 +620,9 @@ input[type="radio"] {
     font-size: 0.9rem;
   }
 
-  .leaderboard-tabs-period .lb-tab {
-    flex: 1 1 calc(50% - 0.25rem);
-  }
-
-  .leaderboard-tabs-metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .leaderboard-tabs-metrics .lb-metric {
     font-size: 0.9rem;
     line-height: 1.2;
-  }
-}
-
-@media (max-width: 420px) {
-  .leaderboard-tabs-metrics {
-    grid-template-columns: 1fr;
   }
 }
 
