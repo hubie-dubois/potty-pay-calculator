@@ -559,15 +559,8 @@ function initFactsPage() {
   const shuffleBtn = document.getElementById("shuffleFacts");
   const randomBtn = document.getElementById("randomFact");
   const shareFactBtn = document.getElementById("shareFact");
-  const posterCard = document.getElementById("posterCard");
-  const posterBadge = document.getElementById("posterBadge");
-  const posterTitle = document.getElementById("posterTitle");
-  const posterEmoji = document.getElementById("posterEmoji");
-  const posterSubtitle = document.getElementById("posterSubtitle");
-  const regenArtBtn = document.getElementById("regenArt");
-  const sharePosterBtn = document.getElementById("sharePoster");
 
-  if (!grid || !featured || !shuffleBtn || !randomBtn || !posterCard || !categorySelect) return;
+  if (!grid || !featured || !shuffleBtn || !randomBtn || !categorySelect) return;
 
   const facts = [
     { category: "office", text: "Most offices have one restroom everyone calls 'the good one' in hushed tones." },
@@ -627,100 +620,6 @@ function initFactsPage() {
   ];
 
   const factIndexByCategory = {};
-  const cursedPosterIndex = { value: -1 };
-  const cursedPosterThemes = [
-    {
-      badge: "CURSED EDITION",
-      title: "The Stall Chose You",
-      emoji: "🕳️🚽👁️",
-      subtitle: "You did not book this meeting. It booked you.",
-      style: "theme-cursed-a"
-    },
-    {
-      badge: "NIGHT SHIFT PORTAL",
-      title: "Flush At Your Own Risk",
-      emoji: "🌑💩⚠️",
-      subtitle: "Some sounds cannot be unheard.",
-      style: "theme-cursed-b"
-    },
-    {
-      badge: "VOID MAINTENANCE",
-      title: "Do Not Break Eye Contact",
-      emoji: "🚪🧻🫥",
-      subtitle: "The paper is watching.",
-      style: "theme-cursed-c"
-    },
-    {
-      badge: "DRAIN ORACLE",
-      title: "The Porcelain Knows",
-      emoji: "🌀🚽🔮",
-      subtitle: "It predicted your coffee decisions.",
-      style: "theme-cursed-d"
-    },
-    {
-      badge: "MIDNIGHT FACILITY",
-      title: "Do Not Enter Stall Seven",
-      emoji: "🌒🚪⛔",
-      subtitle: "The echo in there says your first name.",
-      style: "theme-cursed-e"
-    },
-    {
-      badge: "SEWER PROPHECY",
-      title: "The Pipes Remember",
-      emoji: "🫗🧻🕯️",
-      subtitle: "Every flush writes another chapter.",
-      style: "theme-cursed-f"
-    },
-    {
-      badge: "LAVATORY HEX",
-      title: "Mirror Talks Back",
-      emoji: "🪞😶‍🌫️🚽",
-      subtitle: "You asked for motivation. It offered warnings.",
-      style: "theme-cursed-g"
-    },
-    {
-      badge: "FINAL HAND DRYER",
-      title: "The Wind Is Not Natural",
-      emoji: "🌬️👁️🫧",
-      subtitle: "Some noises should stay in folklore.",
-      style: "theme-cursed-h"
-    },
-    {
-      badge: "PLUMBING RITUAL",
-      title: "Flush Once For Luck",
-      emoji: "🕯️🚽🫧",
-      subtitle: "Flush twice and wake the old pipes.",
-      style: "theme-cursed-i"
-    },
-    {
-      badge: "STAIRWELL WHISPERS",
-      title: "The Sign Says Occupied",
-      emoji: "🚪👣🌫️",
-      subtitle: "But nobody has entered for hours.",
-      style: "theme-cursed-j"
-    },
-    {
-      badge: "PORCELAIN DOOM CLOCK",
-      title: "One Minute Remaining",
-      emoji: "⏳🚽⚫",
-      subtitle: "Make peace with your coffee choices.",
-      style: "theme-cursed-k"
-    },
-    {
-      badge: "EMERGENCY PROTOCOL",
-      title: "Silence In Stall Three",
-      emoji: "🤫🧻🚨",
-      subtitle: "If you hear humming, do not investigate.",
-      style: "theme-cursed-l"
-    },
-    {
-      badge: "LATE SHIFT ORACLE",
-      title: "Mirror, Mirror, No",
-      emoji: "🪞🌘🚽",
-      subtitle: "It gave feedback on your life choices.",
-      style: "theme-cursed-m"
-    }
-  ];
 
   function setStatus(text) {
     if (status) status.textContent = text;
@@ -777,33 +676,6 @@ function initFactsPage() {
     }
   }
 
-  function generatePoster() {
-    const choice = pickNonRepeatingRandom(cursedPosterThemes, cursedPosterIndex).value;
-    if (!choice) return;
-
-    posterCard.classList.remove(
-      "theme-cursed-a",
-      "theme-cursed-b",
-      "theme-cursed-c",
-      "theme-cursed-d",
-      "theme-cursed-e",
-      "theme-cursed-f",
-      "theme-cursed-g",
-      "theme-cursed-h",
-      "theme-cursed-i",
-      "theme-cursed-j",
-      "theme-cursed-k",
-      "theme-cursed-l",
-      "theme-cursed-m"
-    );
-    posterCard.classList.add(choice.style);
-    if (posterBadge) posterBadge.textContent = choice.badge;
-    if (posterTitle) posterTitle.textContent = choice.title;
-    if (posterEmoji) posterEmoji.textContent = choice.emoji;
-    if (posterSubtitle) posterSubtitle.textContent = choice.subtitle;
-    setStatus("Cursed mode poster generated.");
-  }
-
   shuffleBtn.addEventListener("click", shuffleFacts);
   randomBtn.addEventListener("click", showRandomFact);
   categorySelect.addEventListener("change", () => {
@@ -816,17 +688,9 @@ function initFactsPage() {
       shareText(`Potty Fact: ${featured.textContent}`, "Fact");
     });
   }
-  if (regenArtBtn) regenArtBtn.addEventListener("click", generatePoster);
-  if (sharePosterBtn) {
-    sharePosterBtn.addEventListener("click", () => {
-      const text = `${posterTitle ? posterTitle.textContent : ""} — ${posterSubtitle ? posterSubtitle.textContent : ""}`;
-      shareText(`Potty Poster: ${text}`, "Poster");
-    });
-  }
 
   shuffleFacts();
   showRandomFact();
-  generatePoster();
 }
 
 function initRevealStagger() {
