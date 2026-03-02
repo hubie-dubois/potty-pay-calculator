@@ -21,6 +21,10 @@ An interactive, multi-page static website for estimating how much people earn wh
 - Comparison page (`lab.html`)
   - Scenario A vs Scenario B showdown
   - Annual earnings delta and winner indicator
+- Facts page (`facts.html`)
+  - 30+ poop/pee/toilet facts
+  - Shuffle + random featured fact
+  - Generative emoji potty art canvas
 
 ## Local development
 
@@ -45,6 +49,12 @@ npm test
 Notes:
 - Leaderboard scores are calculated in the database using generated columns (`score_weekly`, `score_yearly`) so client submissions cannot directly set final score fields.
 - Current anti-spam protection includes strict database input checks plus a frontend 15-second submit cooldown.
+
+## Fortune system
+
+- The homepage includes a large fortune array in `script.js`.
+- On load and on button click, the app picks a random fortune.
+- It uses a non-repeating random picker so the next fortune is not the same as the previous one.
 ```
 
 ## Deployment

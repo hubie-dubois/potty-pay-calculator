@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Fun facts about poop, pee, toilets, and workplace bathroom science plus generative potty art."
+    />
+    <title>Potty Facts + Art | Potty Pay Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="backdrop" aria-hidden="true"></div>
+    <header class="site-header wrap">
+      <a class="brand" href="index.html">Potty Pay</a>
+      <nav>
+        <a href="index.html#calculator">Calculator</a>
+        <a href="lab.html">Poop Pay Lab</a>
+        <a href="facts.html" aria-current="page">Facts + Art</a>
+      </nav>
+    </header>
+
+    <main class="wrap">
+      <section class="hero reveal compact">
+        <p class="tag">Bathroom Curiosity Department</p>
+        <h1>Poop + Pee Facts</h1>
+        <p>
+          The internet needed a page dedicated to weirdly fascinating restroom trivia,
+          hydration science, and toilet lore. So here we are.
+        </p>
+      </section>
+
+      <section class="panel reveal">
+        <div class="facts-head">
+          <h2>Interesting Bathroom Facts</h2>
+          <div class="hero-actions">
+            <button id="shuffleFacts" class="btn">Shuffle Facts</button>
+            <button id="randomFact" class="btn btn-ghost">Give Me One Random Fact</button>
+          </div>
+        </div>
+        <p id="featuredFact" class="featured-fact">Tap "Give Me One Random Fact" to start.</p>
+        <div id="factsGrid" class="facts-grid" aria-live="polite"></div>
+      </section>
+
+      <section class="panel reveal">
+        <h2>Generative Potty Art Machine</h2>
+        <p class="small-note">Each click makes a fresh toilet-themed emoji artwork.</p>
+        <canvas id="pottyCanvas" class="potty-canvas" width="980" height="430"></canvas>
+        <div class="hero-actions">
+          <button id="regenArt" class="btn">Generate New Art</button>
+        </div>
+      </section>
+
+      <section class="panel reveal">
+        <h2>Fast Myth Check</h2>
+        <div class="facts-grid two-col">
+          <article class="fact-card">
+            <h3>"Clear pee always means perfect hydration."</h3>
+            <p>Not always. Pale yellow is commonly considered a healthy target for many people.</p>
+          </article>
+          <article class="fact-card">
+            <h3>"Holding it forever is harmless."</h3>
+            <p>Regularly delaying bathroom trips can be uncomfortable and is not a great long-term habit.</p>
+          </article>
+          <article class="fact-card">
+            <h3>"Everyone has the same bowel rhythm."</h3>
+            <p>Normal frequency varies a lot. Consistency and comfort matter more than a single number.</p>
+          </article>
+          <article class="fact-card">
+            <h3>"Coffee is only chaos."</h3>
+            <p>Caffeine can stimulate the gut for some people, but responses differ person to person.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="wrap site-footer">
+      <p>Fun facts for entertainment and general education. Not medical advice.</p>
+    </footer>
+
+    <script src="calculator-engine.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

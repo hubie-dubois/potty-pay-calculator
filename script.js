@@ -7,6 +7,18 @@ const appState = {
   currentMetrics: null
 };
 
+function pickNonRepeatingRandom(items, lastIndexRef) {
+  if (!items.length) return { index: -1, value: "" };
+  let idx = Math.floor(Math.random() * items.length);
+  if (items.length > 1) {
+    while (idx === lastIndexRef.value) {
+      idx = Math.floor(Math.random() * items.length);
+    }
+  }
+  lastIndexRef.value = idx;
+  return { index: idx, value: items[idx] };
+}
+
 function initCalculatorPage() {
   const form = document.getElementById("calculator-form");
   if (!form || !Engine) return;
@@ -55,8 +67,46 @@ function initCalculatorPage() {
     "A high-value meeting will start exactly when you stand up.",
     "Today your throne ROI beats your lunch budget.",
     "Productivity tip: schedule your break before the status call.",
-    "You are one flush away from financial enlightenment."
+    "You are one flush away from financial enlightenment.",
+    "A promotion may be hiding behind your next hydration break.",
+    "Your inbox can wait. Your bladder cannot.",
+    "Today, your restroom timing will dodge one awkward hallway chat.",
+    "Your chair misses you, but your digestive system respects you.",
+    "The porcelain throne sees all, judges none.",
+    "A mystery snack will soon reveal its consequences.",
+    "Your hourly rate and fiber intake are both trending up.",
+    "You will discover a genius idea mid-handwash.",
+    "Beware the espresso. Respect the espresso.",
+    "A calm bathroom break will save a chaotic afternoon.",
+    "Hydration now prevents desperation later.",
+    "Your future self thanks you for not skipping breaks.",
+    "A flush today keeps stress away.",
+    "Your most profitable minute starts when the stall door closes.",
+    "A random meme will improve post-break morale by 14%.",
+    "Someone is in your favorite stall. Adapt and overcome.",
+    "Your manager cannot measure your true throne-time efficiency.",
+    "The bathroom fan hum carries ancient office wisdom.",
+    "A tiny walk to the restroom will reset your brain.",
+    "The meeting could have been an email, but this break is essential.",
+    "A well-timed pee break prevents one regrettable Teams message.",
+    "Today is a good day to trust your gut, literally.",
+    "Your throne-time earnings just bought tomorrow's coffee.",
+    "Your posture will improve after this strategic stroll.",
+    "A sink-side pep talk is in your near future.",
+    "The quarter ends, but bathroom breaks are eternal.",
+    "Your best idea this week will happen near a paper towel dispenser.",
+    "The restroom line shall be short and your timing immaculate.",
+    "A gentle flush signals a fresh start.",
+    "You are currently outperforming your own bathroom KPI.",
+    "Luck favors the well-hydrated.",
+    "Your digestive system has entered legendary mode.",
+    "Your next break will feel suspiciously productive.",
+    "Big energy. Small stall.",
+    "The porcelain gods smile upon your calendar gaps."
   ];
+
+  const fortuneIndex = { value: -1 };
+  const fortuneCountEl = document.getElementById("fortuneCount");
 
   let latestMetrics = null;
   let elapsed = 0;
@@ -149,8 +199,9 @@ function initCalculatorPage() {
   function setFortune() {
     const el = document.getElementById("fortuneText");
     if (!el) return;
-    const idx = Math.floor(Math.random() * fortunes.length);
-    el.textContent = fortunes[idx];
+    const choice = pickNonRepeatingRandom(fortunes, fortuneIndex);
+    el.textContent = choice.value;
+    if (fortuneCountEl) fortuneCountEl.textContent = String(fortunes.length);
   }
 
   function applyPreset(name) {
@@ -499,6 +550,119 @@ function initLabPage() {
   recalcLab();
 }
 
+function initFactsPage() {
+  const grid = document.getElementById("factsGrid");
+  const featured = document.getElementById("featuredFact");
+  const shuffleBtn = document.getElementById("shuffleFacts");
+  const randomBtn = document.getElementById("randomFact");
+  const canvas = document.getElementById("pottyCanvas");
+  const regenArtBtn = document.getElementById("regenArt");
+
+  if (!grid || !featured || !shuffleBtn || !randomBtn || !canvas) return;
+
+  const facts = [
+    "Your kidneys filter roughly 180 liters of fluid each day.",
+    "Most adults pee around 6 to 8 times in 24 hours.",
+    "The color of urine can shift based on hydration, foods, and vitamins.",
+    "The colon's major job includes reclaiming water before stool exits the body.",
+    "A normal bowel pattern can range from three times a day to three times a week.",
+    "The Bristol Stool Chart is a real clinical tool for discussing stool consistency.",
+    "The urge to poop often increases after meals due to the gastrocolic reflex.",
+    "Squatting posture can make bowel movements easier for some people.",
+    "Fiber helps bulk stool and can support easier bathroom routines.",
+    "Hydration and movement are common lifestyle levers for bowel regularity.",
+    "Coffee can stimulate colon activity in some people.",
+    "Stress can affect gut function and bathroom timing.",
+    "Gut bacteria influence digestion, gas production, and stool traits.",
+    "Stool is mostly water plus bacteria, fiber residue, and waste products.",
+    "Urine is mostly water with dissolved electrolytes and metabolic byproducts.",
+    "Bladder capacity differs by person and can change with habits over time.",
+    "Ignoring bathroom urges repeatedly can be uncomfortable and disruptive.",
+    "Travel can temporarily alter bowel habits because routines, food, and sleep change.",
+    "Certain foods like beets can temporarily change urine or stool color.",
+    "Pale yellow urine is commonly viewed as a practical hydration target for many people.",
+    "Physical activity can support healthy digestion and bowel movement frequency.",
+    "Sleep quality can influence digestive rhythms the next day.",
+    "Handwashing after bathroom use remains one of the highest-impact hygiene habits.",
+    "Toilet design has evolved for thousands of years across many cultures.",
+    "Modern sewer systems transformed urban public health outcomes.",
+    "Your gut and brain communicate constantly through neural and hormonal pathways.",
+    "Meal timing can affect when bowel urges happen during the day.",
+    "Lactose intolerance can lead to bathroom urgency after dairy for some people.",
+    "Color, frequency, and comfort trends can be more useful than one-off events.",
+    "Bathroom breaks can restore focus and reduce prolonged sitting time.",
+    "Brief walks to and from the restroom can improve circulation during desk-heavy days.",
+    "Cold weather can increase urination frequency for some people.",
+    "Spicy foods may speed things up for sensitive digestive systems.",
+    "Hydration needs vary by climate, activity level, and body size.",
+    "Morning routines often shape bowel timing more than people realize.",
+    "A consistent eating pattern can make bathroom timing more predictable."
+  ];
+
+  const factIndex = { value: -1 };
+  const artCtx = canvas.getContext("2d");
+
+  function renderFactCards(shuffled) {
+    grid.innerHTML = "";
+    shuffled.slice(0, 9).forEach((fact) => {
+      const card = document.createElement("article");
+      card.className = "fact-card";
+      card.innerHTML = `<p>${fact}</p>`;
+      grid.appendChild(card);
+    });
+  }
+
+  function shuffleFacts() {
+    const shuffled = [...facts].sort(() => Math.random() - 0.5);
+    renderFactCards(shuffled);
+  }
+
+  function showRandomFact() {
+    const choice = pickNonRepeatingRandom(facts, factIndex);
+    featured.textContent = choice.value;
+  }
+
+  function drawArt() {
+    if (!artCtx) return;
+
+    const w = canvas.width;
+    const h = canvas.height;
+
+    const bg = artCtx.createLinearGradient(0, 0, w, h);
+    bg.addColorStop(0, "#f5df87");
+    bg.addColorStop(0.5, "#e6bf6f");
+    bg.addColorStop(1, "#c08e5c");
+    artCtx.fillStyle = bg;
+    artCtx.fillRect(0, 0, w, h);
+
+    const icons = ["🚽", "💩", "🧻", "💧", "🫧", "🚰"];
+
+    for (let i = 0; i < 95; i += 1) {
+      const icon = icons[Math.floor(Math.random() * icons.length)];
+      const x = Math.random() * w;
+      const y = Math.random() * h;
+      const size = 18 + Math.random() * 40;
+      const alpha = 0.25 + Math.random() * 0.65;
+
+      artCtx.save();
+      artCtx.translate(x, y);
+      artCtx.rotate((Math.random() - 0.5) * 0.6);
+      artCtx.globalAlpha = alpha;
+      artCtx.font = `${size}px "Apple Color Emoji", "Segoe UI Emoji", sans-serif`;
+      artCtx.fillText(icon, 0, 0);
+      artCtx.restore();
+    }
+  }
+
+  shuffleBtn.addEventListener("click", shuffleFacts);
+  randomBtn.addEventListener("click", showRandomFact);
+  if (regenArtBtn) regenArtBtn.addEventListener("click", drawArt);
+
+  shuffleFacts();
+  showRandomFact();
+  drawArt();
+}
+
 function initRevealStagger() {
   const elements = document.querySelectorAll(".reveal");
   elements.forEach((el, idx) => {
@@ -510,3 +674,4 @@ initRevealStagger();
 initCalculatorPage();
 initLeaderboard();
 initLabPage();
+initFactsPage();
