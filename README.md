@@ -14,7 +14,6 @@ An interactive, multi-page static website for estimating how much people earn wh
   - Yearly/weekly/monthly/day/visit payout estimates
   - Poop-vs-pee percentage breakdown
   - Preset profiles
-  - Random "potty fortune" generator
 - Session timer page (`timer.html`)
   - Dedicated live throne timer page
   - Standalone pay profile (hourly/salary)
@@ -26,6 +25,7 @@ An interactive, multi-page static website for estimating how much people earn wh
   - 50+ poop/pee/toilet facts in a funnier style
   - Shuffle + random featured fact with category filters
   - Share/copy for featured facts
+  - Daily potty fortune generator
 - Leaderboard page (`leaderboard.html`)
   - Dedicated global leaderboard page
   - Standalone submission profile (hourly/salary + schedule inputs)
@@ -60,7 +60,7 @@ Notes:
 
 ## Fortune system
 
-- The homepage includes a large fortune array in `script.js`.
+- The facts page includes a large fortune array in `script.js`.
 - On load and on button click, the app picks a random fortune.
 - It uses a non-repeating random picker so the next fortune is not the same as the previous one.
 
