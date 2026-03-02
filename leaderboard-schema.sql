@@ -13,7 +13,8 @@ create table if not exists public.leaderboard_entries (
   annual_salary numeric(12,2) not null default 0 check (annual_salary >= 0 and annual_salary <= 10000000),
   hours_per_week numeric(5,2) not null check (hours_per_week > 0 and hours_per_week <= 120),
   workdays_per_week numeric(4,2) not null check (workdays_per_week > 0 and workdays_per_week <= 7),
-  minutes_per_visit numeric(5,2) not null check (minutes_per_visit > 0 and minutes_per_visit <= 180),
+  poop_minutes_per_visit numeric(5,2) not null check (poop_minutes_per_visit > 0 and poop_minutes_per_visit <= 180),
+  pee_minutes_per_visit numeric(5,2) not null check (pee_minutes_per_visit > 0 and pee_minutes_per_visit <= 180),
   visits_per_day numeric(5,2) not null check (visits_per_day > 0 and visits_per_day <= 20),
   poop_visits_per_day numeric(5,2) not null default 0 check (poop_visits_per_day >= 0 and poop_visits_per_day <= visits_per_day),
   weeks_per_year numeric(5,2) not null check (weeks_per_year > 0 and weeks_per_year <= 52),
@@ -26,7 +27,10 @@ create table if not exists public.leaderboard_entries (
           else hourly_rate
         end
       ) / 60.0
-    ) * minutes_per_visit * visits_per_day * workdays_per_week
+    ) * (
+      (poop_minutes_per_visit * poop_visits_per_day) +
+      (pee_minutes_per_visit * (visits_per_day - poop_visits_per_day))
+    ) * workdays_per_week
   ) stored,
   score_yearly numeric generated always as (
     (
@@ -36,7 +40,10 @@ create table if not exists public.leaderboard_entries (
           else hourly_rate
         end
       ) / 60.0
-    ) * minutes_per_visit * visits_per_day * workdays_per_week * weeks_per_year
+    ) * (
+      (poop_minutes_per_visit * poop_visits_per_day) +
+      (pee_minutes_per_visit * (visits_per_day - poop_visits_per_day))
+    ) * workdays_per_week * weeks_per_year
   ) stored,
   score_daily numeric generated always as (
     (
@@ -46,10 +53,16 @@ create table if not exists public.leaderboard_entries (
           else hourly_rate
         end
       ) / 60.0
-    ) * minutes_per_visit * visits_per_day
+    ) * (
+      (poop_minutes_per_visit * poop_visits_per_day) +
+      (pee_minutes_per_visit * (visits_per_day - poop_visits_per_day))
+    )
   ) stored,
   bathroom_minutes_yearly numeric generated always as (
-    minutes_per_visit * visits_per_day * workdays_per_week * weeks_per_year
+    (
+      (poop_minutes_per_visit * poop_visits_per_day) +
+      (pee_minutes_per_visit * (visits_per_day - poop_visits_per_day))
+    ) * workdays_per_week * weeks_per_year
   ) stored,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()

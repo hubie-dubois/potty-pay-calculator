@@ -76,7 +76,8 @@ function initCalculatorPage() {
     annualSalary: document.getElementById("annualSalary"),
     hoursPerWeek: document.getElementById("hoursPerWeek"),
     workdaysPerWeek: document.getElementById("workdaysPerWeek"),
-    minutesPerVisit: document.getElementById("minutesPerVisit"),
+    poopMinutesPerVisit: document.getElementById("poopMinutesPerVisit"),
+    peeMinutesPerVisit: document.getElementById("peeMinutesPerVisit"),
     visitsPerDay: document.getElementById("visitsPerDay"),
     poopVisitsPerDay: document.getElementById("poopVisitsPerDay"),
     weeksPerYear: document.getElementById("weeksPerYear")
@@ -123,7 +124,8 @@ function initCalculatorPage() {
       annualSalary: Engine.readNum(inputs.annualSalary.value),
       hoursPerWeek: Engine.readNum(inputs.hoursPerWeek.value),
       workdaysPerWeek: Engine.readNum(inputs.workdaysPerWeek.value),
-      minutesPerVisit: Engine.readNum(inputs.minutesPerVisit.value),
+      poopMinutesPerVisit: Engine.readNum(inputs.poopMinutesPerVisit.value),
+      peeMinutesPerVisit: Engine.readNum(inputs.peeMinutesPerVisit.value),
       visitsPerDay: Engine.readNum(inputs.visitsPerDay.value),
       poopVisitsPerDay: Engine.readNum(inputs.poopVisitsPerDay.value),
       weeksPerYear: Engine.readNum(inputs.weeksPerYear.value)
@@ -162,14 +164,12 @@ function initCalculatorPage() {
     output.month.textContent = Engine.money(metrics.perMonth);
     output.year.textContent = Engine.money(metrics.perYear);
 
-    const poopPct = data.visitsPerDay > 0 ? (data.poopVisitsPerDay / data.visitsPerDay) * 100 : 0;
-    const peePct = 100 - poopPct;
-    const poopYear = (metrics.perYear * poopPct) / 100;
-    const peeYear = metrics.perYear - poopYear;
+    const poopShare = metrics.perYear > 0 ? (metrics.poopPerYear / metrics.perYear) * 100 : 0;
+    const peeShare = 100 - poopShare;
 
-    output.breakdown.textContent = `${Engine.money(poopYear)} from about ${data.poopVisitsPerDay} poop visit(s)/day and ${Engine.money(peeYear)} from pee visits per year.`;
-    output.poopBar.style.width = `${poopPct}%`;
-    output.peeBar.style.width = `${peePct}%`;
+    output.breakdown.textContent = `${Engine.money(metrics.poopPerYear)} from about ${data.poopVisitsPerDay} poop visit(s)/day and ${Engine.money(metrics.peePerYear)} from pee visits per year.`;
+    output.poopBar.style.width = `${poopShare}%`;
+    output.peeBar.style.width = `${peeShare}%`;
 
     output.equivalents.innerHTML = "";
     Engine.annualEquivalents(metrics.perYear).forEach((item) => {
@@ -185,15 +185,6 @@ function initCalculatorPage() {
 
   function recalc() {
     const data = currentData();
-    if (!Number.isFinite(data.poopVisitsPerDay) || data.poopVisitsPerDay < 0) {
-      calcError.textContent = "Poop visits per workday must be 0 or greater.";
-      return;
-    }
-    if (data.poopVisitsPerDay > data.visitsPerDay) {
-      calcError.textContent = "Poop visits per workday cannot be greater than total visits per workday.";
-      return;
-    }
-
     const error = Engine.validateBase(data);
     calcError.textContent = error;
     if (error) return;
@@ -209,7 +200,8 @@ function initCalculatorPage() {
         hourlyRate: 22,
         hoursPerWeek: 20,
         workdaysPerWeek: 4,
-        minutesPerVisit: 8,
+        poopMinutesPerVisit: 10,
+        peeMinutesPerVisit: 4,
         visitsPerDay: 2,
         poopVisitsPerDay: 1,
         weeksPerYear: 48
@@ -219,7 +211,8 @@ function initCalculatorPage() {
         hourlyRate: 31.5,
         hoursPerWeek: 40,
         workdaysPerWeek: 5,
-        minutesPerVisit: 11,
+        poopMinutesPerVisit: 12,
+        peeMinutesPerVisit: 5,
         visitsPerDay: 3,
         poopVisitsPerDay: 1,
         weeksPerYear: 50
@@ -229,7 +222,8 @@ function initCalculatorPage() {
         annualSalary: 115000,
         hoursPerWeek: 60,
         workdaysPerWeek: 6,
-        minutesPerVisit: 14,
+        poopMinutesPerVisit: 14,
+        peeMinutesPerVisit: 6,
         visitsPerDay: 4,
         poopVisitsPerDay: 2,
         weeksPerYear: 50
@@ -239,7 +233,8 @@ function initCalculatorPage() {
         hourlyRate: 29,
         hoursPerWeek: 45,
         workdaysPerWeek: 5,
-        minutesPerVisit: 9,
+        poopMinutesPerVisit: 11,
+        peeMinutesPerVisit: 4,
         visitsPerDay: 6,
         poopVisitsPerDay: 2,
         weeksPerYear: 50
@@ -258,7 +253,8 @@ function initCalculatorPage() {
     if (preset.annualSalary !== undefined) inputs.annualSalary.value = String(preset.annualSalary);
     inputs.hoursPerWeek.value = String(preset.hoursPerWeek);
     inputs.workdaysPerWeek.value = String(preset.workdaysPerWeek);
-    inputs.minutesPerVisit.value = String(preset.minutesPerVisit);
+    inputs.poopMinutesPerVisit.value = String(preset.poopMinutesPerVisit);
+    inputs.peeMinutesPerVisit.value = String(preset.peeMinutesPerVisit);
     inputs.visitsPerDay.value = String(preset.visitsPerDay);
     inputs.poopVisitsPerDay.value = String(preset.poopVisitsPerDay);
     inputs.weeksPerYear.value = String(preset.weeksPerYear);
@@ -366,7 +362,8 @@ function initLeaderboard() {
   const lbAnnualSalary = document.getElementById("lbAnnualSalary");
   const lbHoursPerWeek = document.getElementById("lbHoursPerWeek");
   const lbWorkdaysPerWeek = document.getElementById("lbWorkdaysPerWeek");
-  const lbMinutesPerVisit = document.getElementById("lbMinutesPerVisit");
+  const lbPoopMinutesPerVisit = document.getElementById("lbPoopMinutesPerVisit");
+  const lbPeeMinutesPerVisit = document.getElementById("lbPeeMinutesPerVisit");
   const lbVisitsPerDay = document.getElementById("lbVisitsPerDay");
   const lbPoopVisitsPerDay = document.getElementById("lbPoopVisitsPerDay");
   const lbWeeksPerYear = document.getElementById("lbWeeksPerYear");
@@ -375,7 +372,8 @@ function initLeaderboard() {
     lbPayType.length > 0 &&
     lbHoursPerWeek &&
     lbWorkdaysPerWeek &&
-    lbMinutesPerVisit &&
+    lbPoopMinutesPerVisit &&
+    lbPeeMinutesPerVisit &&
     lbVisitsPerDay &&
     lbPoopVisitsPerDay &&
     lbWeeksPerYear;
@@ -433,7 +431,8 @@ function initLeaderboard() {
       annualSalary: Engine.readNum(lbAnnualSalary ? lbAnnualSalary.value : "0"),
       hoursPerWeek: Engine.readNum(lbHoursPerWeek.value),
       workdaysPerWeek: Engine.readNum(lbWorkdaysPerWeek.value),
-      minutesPerVisit: Engine.readNum(lbMinutesPerVisit.value),
+      poopMinutesPerVisit: Engine.readNum(lbPoopMinutesPerVisit.value),
+      peeMinutesPerVisit: Engine.readNum(lbPeeMinutesPerVisit.value),
       visitsPerDay: Engine.readNum(lbVisitsPerDay.value),
       poopVisitsPerDay: Engine.readNum(lbPoopVisitsPerDay.value),
       weeksPerYear: Engine.readNum(lbWeeksPerYear.value)
@@ -527,15 +526,6 @@ function initLeaderboard() {
       setMessage("No calculator profile found for submission.");
       return;
     }
-    if (!Number.isFinite(data.poopVisitsPerDay) || data.poopVisitsPerDay < 0) {
-      setMessage("Poop visits per workday must be 0 or greater.");
-      return;
-    }
-    if (data.poopVisitsPerDay > data.visitsPerDay) {
-      setMessage("Poop visits per workday cannot be greater than total visits per workday.");
-      return;
-    }
-
     const metrics = Engine.computeMetrics(data);
     const payload = {
       display_name: displayName,
@@ -545,7 +535,8 @@ function initLeaderboard() {
       annual_salary: Number(data.annualSalary || 0),
       hours_per_week: Number(data.hoursPerWeek),
       workdays_per_week: Number(data.workdaysPerWeek),
-      minutes_per_visit: Number(data.minutesPerVisit),
+      poop_minutes_per_visit: Number(data.poopMinutesPerVisit),
+      pee_minutes_per_visit: Number(data.peeMinutesPerVisit),
       visits_per_day: Number(data.visitsPerDay),
       poop_visits_per_day: Number(data.poopVisitsPerDay),
       weeks_per_year: Number(data.weeksPerYear)
@@ -604,8 +595,10 @@ function readScenario(form) {
     annualSalary: 0,
     hoursPerWeek: Engine.readNum(form.elements.hoursPerWeek.value),
     workdaysPerWeek: Engine.readNum(form.elements.workdaysPerWeek.value),
-    minutesPerVisit: Engine.readNum(form.elements.minutesPerVisit.value),
+    poopMinutesPerVisit: Engine.readNum(form.elements.poopMinutesPerVisit.value),
+    peeMinutesPerVisit: Engine.readNum(form.elements.peeMinutesPerVisit.value),
     visitsPerDay: Engine.readNum(form.elements.visitsPerDay.value),
+    poopVisitsPerDay: Engine.readNum(form.elements.poopVisitsPerDay.value),
     weeksPerYear: Engine.readNum(form.elements.weeksPerYear.value)
   };
 }
@@ -886,8 +879,10 @@ function initTimerPage() {
       annualSalary: Engine.readNum(annualSalary.value),
       hoursPerWeek: Engine.readNum(hoursPerWeek.value),
       workdaysPerWeek: 5,
-      minutesPerVisit: 10,
+      poopMinutesPerVisit: 10,
+      peeMinutesPerVisit: 5,
       visitsPerDay: 1,
+      poopVisitsPerDay: 0,
       weeksPerYear: Engine.readNum(weeksPerYear.value)
     };
   }

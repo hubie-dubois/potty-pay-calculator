@@ -11,8 +11,9 @@ An interactive, multi-page static website for estimating how much people earn wh
 - Main calculator page (`index.html`)
   - Hourly + salary modes
   - Supports variable schedules (20-hour, 40-hour, 60-hour+)
+  - Separate poop-minutes and pee-minutes per visit inputs
   - Yearly/weekly/monthly/day/visit payout estimates
-  - Poop-vs-pee percentage breakdown
+  - Poop-vs-pee earnings breakdown
   - Preset profiles
 - Session timer page (`timer.html`)
   - Dedicated live throne timer page
@@ -28,7 +29,7 @@ An interactive, multi-page static website for estimating how much people earn wh
   - Daily potty fortune generator
 - Leaderboard page (`leaderboard.html`)
   - Dedicated global leaderboard page (rankings shown at top)
-  - Standalone submission profile (hourly/salary + schedule inputs)
+  - Standalone submission profile (hourly/salary + schedule + split poop/pee duration inputs)
   - All-time and monthly ranking tabs
   - Category rankings:
     - Yearly earnings
@@ -63,7 +64,7 @@ npm test
 4. Commit/push. GitHub Pages will pick it up.
 
 Notes:
-- Leaderboard scores are calculated in the database using generated columns (`score_weekly`, `score_yearly`) so client submissions cannot directly set final score fields.
+- Leaderboard scores are calculated in the database using generated columns (`score_daily`, `score_weekly`, `score_yearly`) from poop/pee durations, so client submissions cannot directly set final score fields.
 - Current anti-spam protection includes strict database input checks plus a frontend 15-second submit cooldown.
 - The current #1 person is whichever row has the highest value for the currently selected ranking metric.
 
