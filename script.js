@@ -61,6 +61,7 @@ function initCalculatorPage() {
     reset: document.getElementById("resetTimer"),
     lifetime: document.getElementById("lifetimeTotal")
   };
+  const hasTimer = Boolean(timer.clock && timer.earned && timer.meta && timer.start && timer.stop && timer.reset && timer.lifetime);
 
   const fortunes = [
     "The spreadsheet fears your bowel confidence.",
@@ -145,6 +146,7 @@ function initCalculatorPage() {
   }
 
   function renderLifetime() {
+    if (!hasTimer) return;
     const stored = Number.parseFloat(localStorage.getItem(STORAGE_KEY) || "0");
     timer.lifetime.textContent = `Lifetime tracked throne earnings in this browser: ${Engine.money(stored)}`;
   }
@@ -183,7 +185,9 @@ function initCalculatorPage() {
       output.equivalents.appendChild(li);
     });
 
-    timer.meta.textContent = `Earning rate while seated: ${Engine.money(metrics.perMinute)} per minute.`;
+    if (hasTimer) {
+      timer.meta.textContent = `Earning rate while seated: ${Engine.money(metrics.perMinute)} per minute.`;
+    }
   }
 
   function recalc() {
@@ -270,6 +274,7 @@ function initCalculatorPage() {
   }
 
   function drawTimer() {
+    if (!hasTimer) return;
     const perSecond = latestMetrics ? latestMetrics.effectiveHourly / 3600 : 0;
     timer.clock.textContent = Engine.formatClock(elapsed);
     timer.earned.textContent = Engine.money(elapsed * perSecond);
@@ -309,20 +314,22 @@ function initCalculatorPage() {
     button.addEventListener("click", () => applyPreset(button.dataset.preset));
   });
 
-  if (timer.start) timer.start.addEventListener("click", startTimer);
-  if (timer.stop) timer.stop.addEventListener("click", stopTimer);
-  if (timer.reset) timer.reset.addEventListener("click", resetTimer);
+  if (hasTimer) {
+    timer.start.addEventListener("click", startTimer);
+    timer.stop.addEventListener("click", stopTimer);
+    timer.reset.addEventListener("click", resetTimer);
+  }
 
   const fortuneBtn = document.getElementById("newFortune");
   if (fortuneBtn) fortuneBtn.addEventListener("click", setFortune);
 
   setPayVisibility();
-  renderLifetime();
+  if (hasTimer) renderLifetime();
   setFortune();
   recalc();
-  drawTimer();
+  if (hasTimer) drawTimer();
 
-  window.addEventListener("beforeunload", stopTimer);
+  if (hasTimer) window.addEventListener("beforeunload", stopTimer);
 }
 
 function getSupabaseClient() {
@@ -770,6 +777,126 @@ function initFactsPage() {
   showRandomFact();
 }
 
+function initTimerPage() {
+  const form = document.getElementById("timer-form");
+  if (!form || !Engine) return;
+
+  const payTypeInputs = form.querySelectorAll('input[name="timerPayType"]');
+  const hourlyWrap = document.getElementById("timerHourlyWrap");
+  const salaryWrap = document.getElementById("timerSalaryWrap");
+  const hourlyRate = document.getElementById("timerHourlyRate");
+  const annualSalary = document.getElementById("timerAnnualSalary");
+  const hoursPerWeek = document.getElementById("timerHoursPerWeek");
+  const weeksPerYear = document.getElementById("timerWeeksPerYear");
+  const error = document.getElementById("timerError");
+
+  const clock = document.getElementById("timerClockStandalone");
+  const earned = document.getElementById("timerEarnedStandalone");
+  const meta = document.getElementById("timerMetaStandalone");
+  const lifetime = document.getElementById("lifetimeTotalStandalone");
+  const startBtn = document.getElementById("startTimerStandalone");
+  const stopBtn = document.getElementById("stopTimerStandalone");
+  const resetBtn = document.getElementById("resetTimerStandalone");
+
+  let latestMetrics = null;
+  let elapsed = 0;
+  let tickId = null;
+
+  function getPayType() {
+    const selected = Array.from(payTypeInputs).find((radio) => radio.checked);
+    return selected ? selected.value : "hourly";
+  }
+
+  function togglePayFields() {
+    const isHourly = getPayType() === "hourly";
+    hourlyWrap.classList.toggle("hidden", !isHourly);
+    salaryWrap.classList.toggle("hidden", isHourly);
+    hourlyRate.required = isHourly;
+    annualSalary.required = !isHourly;
+  }
+
+  function currentData() {
+    return {
+      payType: getPayType(),
+      hourlyRate: Engine.readNum(hourlyRate.value),
+      annualSalary: Engine.readNum(annualSalary.value),
+      hoursPerWeek: Engine.readNum(hoursPerWeek.value),
+      workdaysPerWeek: 5,
+      minutesPerVisit: 10,
+      visitsPerDay: 1,
+      weeksPerYear: Engine.readNum(weeksPerYear.value)
+    };
+  }
+
+  function renderLifetime() {
+    const stored = Number.parseFloat(localStorage.getItem(STORAGE_KEY) || "0");
+    lifetime.textContent = `Lifetime tracked throne earnings in this browser: ${Engine.money(stored)}`;
+  }
+
+  function saveLifetime(delta) {
+    const stored = Number.parseFloat(localStorage.getItem(STORAGE_KEY) || "0");
+    localStorage.setItem(STORAGE_KEY, String(stored + delta));
+    renderLifetime();
+  }
+
+  function drawTimer() {
+    const perSecond = latestMetrics ? latestMetrics.effectiveHourly / 3600 : 0;
+    clock.textContent = Engine.formatClock(elapsed);
+    earned.textContent = Engine.money(elapsed * perSecond);
+  }
+
+  function recalcProfile() {
+    const data = currentData();
+    const valid = Engine.validateBase(data);
+    error.textContent = valid;
+    if (valid) return;
+
+    latestMetrics = Engine.computeMetrics(data);
+    meta.textContent = `Earning rate while seated: ${Engine.money(latestMetrics.perMinute)} per minute.`;
+    drawTimer();
+  }
+
+  function startTimer() {
+    if (tickId || !latestMetrics) return;
+    tickId = window.setInterval(() => {
+      elapsed += 1;
+      drawTimer();
+    }, 1000);
+  }
+
+  function stopTimer() {
+    if (!tickId) return;
+    window.clearInterval(tickId);
+    tickId = null;
+    const perSecond = latestMetrics ? latestMetrics.effectiveHourly / 3600 : 0;
+    saveLifetime(elapsed * perSecond);
+  }
+
+  function resetTimer() {
+    stopTimer();
+    elapsed = 0;
+    drawTimer();
+  }
+
+  Array.from(form.elements).forEach((el) => {
+    el.addEventListener("input", recalcProfile);
+    el.addEventListener("change", () => {
+      togglePayFields();
+      recalcProfile();
+    });
+  });
+
+  startBtn.addEventListener("click", startTimer);
+  stopBtn.addEventListener("click", stopTimer);
+  resetBtn.addEventListener("click", resetTimer);
+
+  togglePayFields();
+  renderLifetime();
+  recalcProfile();
+  drawTimer();
+  window.addEventListener("beforeunload", stopTimer);
+}
+
 function initRevealStagger() {
   const elements = document.querySelectorAll(".reveal");
   elements.forEach((el, idx) => {
@@ -779,6 +906,7 @@ function initRevealStagger() {
 
 initRevealStagger();
 initCalculatorPage();
+initTimerPage();
 initLeaderboard();
 initLabPage();
 initFactsPage();

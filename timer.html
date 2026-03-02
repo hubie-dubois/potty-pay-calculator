@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Live throne session timer with standalone pay profile inputs for real-time bathroom earnings."
+    />
+    <title>Session Timer | Potty Pay Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="backdrop" aria-hidden="true"></div>
+    <header class="site-header wrap">
+      <a class="brand" href="index.html">Potty Pay</a>
+      <nav>
+        <a href="index.html#calculator">Calculator</a>
+        <a href="timer.html" aria-current="page">Session Timer</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="facts.html">Facts</a>
+        <a href="lab.html">Poop Pay Lab</a>
+      </nav>
+    </header>
+
+    <main class="wrap">
+      <section class="hero reveal compact">
+        <p class="tag">Real-Time Throne Economics</p>
+        <h1>Live Session Timer</h1>
+        <p>Set your pay profile, start the timer, and track exactly how much your break is worth in real time.</p>
+      </section>
+
+      <section class="panel reveal">
+        <h2>Timer Profile</h2>
+        <form id="timer-form" novalidate>
+          <fieldset class="toggle-row">
+            <legend>Pay type</legend>
+            <label><input type="radio" name="timerPayType" value="hourly" checked /> Hourly</label>
+            <label><input type="radio" name="timerPayType" value="salary" /> Salary</label>
+          </fieldset>
+
+          <div class="form-grid">
+            <label id="timerHourlyWrap">
+              Hourly rate ($)
+              <input id="timerHourlyRate" type="number" min="0" step="0.01" value="31.5" required />
+            </label>
+            <label id="timerSalaryWrap" class="hidden">
+              Annual salary ($)
+              <input id="timerAnnualSalary" type="number" min="0" step="1" value="78000" />
+            </label>
+            <label>
+              Hours worked per week
+              <input id="timerHoursPerWeek" type="number" min="1" max="120" step="0.5" value="40" required />
+            </label>
+            <label>
+              Weeks worked per year
+              <input id="timerWeeksPerYear" type="number" min="1" max="52" step="1" value="50" required />
+            </label>
+          </div>
+          <p id="timerError" class="error" role="alert" aria-live="polite"></p>
+        </form>
+
+        <div class="timer-box">
+          <p id="timerClockStandalone" class="timer-clock">00:00</p>
+          <p id="timerEarnedStandalone" class="timer-earned">$0.00</p>
+          <p id="timerMetaStandalone" class="timer-meta">Earning rate while seated: $0.00 per minute.</p>
+          <div class="timer-actions">
+            <button id="startTimerStandalone" type="button" class="btn">Start</button>
+            <button id="stopTimerStandalone" type="button" class="btn btn-ghost">Stop</button>
+            <button id="resetTimerStandalone" type="button" class="btn btn-ghost">Reset</button>
+          </div>
+        </div>
+        <p id="lifetimeTotalStandalone" class="lifetime"></p>
+      </section>
+    </main>
+
+    <footer class="wrap site-footer">
+      <p>Session timer page for focused live tracking.</p>
+      <p class="small-note">Want to compete? <a href="leaderboard.html">Visit Global Leaderboard</a>.</p>
+    </footer>
+
+    <script src="calculator-engine.js"></script>
+    <script src="script.js"></script>
+    <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "46995037618842eb9ee8d9a523f4d07b"}'></script><!-- End Cloudflare Web Analytics -->
+  </body>
+</html>

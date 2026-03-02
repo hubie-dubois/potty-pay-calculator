@@ -22,7 +22,7 @@
       <a class="brand" href="index.html">Potty Pay</a>
       <nav>
         <a href="#calculator">Calculator</a>
-        <a href="#session">Session Timer</a>
+        <a href="timer.html">Session Timer</a>
         <a href="leaderboard.html">Leaderboard</a>
         <a href="facts.html">Facts</a>
         <a href="lab.html">Poop Pay Lab</a>
@@ -156,22 +156,6 @@
         </div>
       </section>
 
-      <section id="session" class="panel reveal">
-        <h2>Live Throne Session Timer</h2>
-        <p>Start the timer when you sit down. Stop when your legs go numb.</p>
-        <div class="timer-box">
-          <p id="timerClock" class="timer-clock">00:00</p>
-          <p id="timerEarned" class="timer-earned">$0.00</p>
-          <p id="timerMeta" class="timer-meta">Based on your current effective hourly rate.</p>
-          <div class="timer-actions">
-            <button id="startTimer" class="btn">Start</button>
-            <button id="stopTimer" class="btn btn-ghost">Stop</button>
-            <button id="resetTimer" class="btn btn-ghost">Reset</button>
-          </div>
-        </div>
-        <p id="lifetimeTotal" class="lifetime"></p>
-      </section>
-
       <section class="panel reveal">
         <h2>Daily Potty Fortune</h2>
         <p id="fortuneText"></p>
@@ -183,6 +167,7 @@
 
     <footer class="wrap site-footer">
       <p>Potty Pay Calculator. Built for science, laughs, and suspiciously profitable bathroom breaks.</p>
+      <p class="small-note">Want to compete? <a href="leaderboard.html">Visit Global Leaderboard</a>.</p>
     </footer>
 
     <script src="calculator-engine.js"></script>

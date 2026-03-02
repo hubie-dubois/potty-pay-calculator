@@ -14,10 +14,11 @@ An interactive, multi-page static website for estimating how much people earn wh
   - Yearly/weekly/monthly/day/visit payout estimates
   - Poop-vs-pee percentage breakdown
   - Preset profiles
-  - Real-time throne session timer
-  - Local browser lifetime earnings tracker
   - Random "potty fortune" generator
-  - Global leaderboard UI (Supabase-backed, free tier)
+- Session timer page (`timer.html`)
+  - Dedicated live throne timer page
+  - Standalone pay profile (hourly/salary)
+  - Local browser lifetime earnings tracker
 - Comparison page (`lab.html`)
   - Scenario A vs Scenario B showdown
   - Annual earnings delta and winner indicator
@@ -42,6 +43,7 @@ Run calculator engine tests:
 
 ```bash
 npm test
+```
 
 ## Free global leaderboard setup (Supabase)
 
@@ -61,7 +63,6 @@ Notes:
 - The homepage includes a large fortune array in `script.js`.
 - On load and on button click, the app picks a random fortune.
 - It uses a non-repeating random picker so the next fortune is not the same as the previous one.
-```
 
 ## Deployment
 
