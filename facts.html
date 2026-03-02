@@ -43,8 +43,21 @@
           <div class="hero-actions">
             <button id="shuffleFacts" class="btn">Shuffle Facts</button>
             <button id="randomFact" class="btn btn-ghost">Give Me One Random Fact</button>
+            <button id="shareFact" class="btn btn-ghost">Share This Fact</button>
           </div>
         </div>
+        <div class="facts-toolbar">
+          <label for="factCategory">Fact category</label>
+          <select id="factCategory">
+            <option value="all">All chaos</option>
+            <option value="office">Office Stall Lore</option>
+            <option value="coffee">Coffee Consequences</option>
+            <option value="science">Body Weirdness</option>
+            <option value="history">Toilet History</option>
+          </select>
+          <p class="small-note">Available in this category: <span id="factsCount">0</span></p>
+        </div>
+        <p id="factsStatus" class="small-note" aria-live="polite"></p>
         <p id="featuredFact" class="featured-fact">Tap "Give Me One Random Fact" to start.</p>
         <div id="factsGrid" class="facts-grid" aria-live="polite"></div>
       </section>
@@ -52,6 +65,10 @@
       <section class="panel reveal">
         <h2>Potty Poster Generator</h2>
         <p class="small-note">Each click makes a new fake motivational bathroom poster.</p>
+        <label class="toggle-inline">
+          <input id="cursedMode" type="checkbox" />
+          <span>Enable darkly cursed mode</span>
+        </label>
         <article id="posterCard" class="poster-card">
           <p id="posterBadge" class="poster-badge">THRONE CERTIFIED</p>
           <h3 id="posterTitle">Loading Poster...</h3>
@@ -60,6 +77,7 @@
         </article>
         <div class="hero-actions">
           <button id="regenArt" class="btn">Generate New Poster</button>
+          <button id="sharePoster" class="btn btn-ghost">Share This Poster</button>
         </div>
       </section>
 

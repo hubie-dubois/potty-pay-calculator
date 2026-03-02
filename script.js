@@ -553,74 +553,83 @@ function initLabPage() {
 function initFactsPage() {
   const grid = document.getElementById("factsGrid");
   const featured = document.getElementById("featuredFact");
+  const status = document.getElementById("factsStatus");
+  const factsCount = document.getElementById("factsCount");
+  const categorySelect = document.getElementById("factCategory");
   const shuffleBtn = document.getElementById("shuffleFacts");
   const randomBtn = document.getElementById("randomFact");
+  const shareFactBtn = document.getElementById("shareFact");
   const posterCard = document.getElementById("posterCard");
   const posterBadge = document.getElementById("posterBadge");
   const posterTitle = document.getElementById("posterTitle");
   const posterEmoji = document.getElementById("posterEmoji");
   const posterSubtitle = document.getElementById("posterSubtitle");
+  const cursedMode = document.getElementById("cursedMode");
   const regenArtBtn = document.getElementById("regenArt");
+  const sharePosterBtn = document.getElementById("sharePoster");
 
-  if (!grid || !featured || !shuffleBtn || !randomBtn || !posterCard) return;
+  if (!grid || !featured || !shuffleBtn || !randomBtn || !posterCard || !categorySelect) return;
 
   const facts = [
-    "The first known flushing toilet design is over 400 years old, and we still celebrate every successful flush.",
-    "Your bladder sends polite warning signals first, then rapidly escalates to hostile urgency.",
-    "Coffee has started more emergency bathroom sprints than most cardio programs.",
-    "The office bathroom line is directly proportional to the number of people who just had iced coffee.",
-    "Your gut absolutely has main-character energy after a risky burrito.",
-    "The phrase 'quick bathroom break' has never been more optimistic than before opening social media.",
-    "A good bathroom fan can sound like a helicopter preparing for takeoff.",
-    "Humans are one of the few species that judge toilet paper quality this emotionally.",
-    "You can tell a lot about a workplace by how soft the toilet paper is.",
-    "Most people have a preferred stall and pretend they do not.",
-    "A dramatic stomach rumble in a silent restroom is a universal character-building moment.",
-    "Pee color can shift with hydration, vitamins, and your fearless commitment to energy drinks.",
-    "Your colon is basically a logistics manager handling difficult deliveries.",
-    "The phrase 'trust your gut' is sometimes literal and urgent.",
-    "Phones have extended average bathroom break durations more than any invention since indoor plumbing.",
-    "A suspiciously quiet restroom usually means someone is fighting for their life in stall three.",
-    "Bidets are basically pressure washers with diplomacy.",
-    "Fiber is the unsung hero of every smooth morning routine.",
-    "Your digestive system can absolutely hold grudges about yesterday's food choices.",
-    "The bathroom mirror has heard more pep talks than most managers.",
-    "Public restroom hand dryers can sound like a tiny jet engine.",
-    "Hydration is cool until your commute has no exits.",
-    "The gut-brain connection explains why stress can send you speed-walking to the restroom.",
-    "The workplace bathroom is a weird blend of privacy, strategy, and acoustics.",
-    "There is no bolder optimism than entering a one-stall restroom with a laptop in hand.",
-    "A post-meeting bathroom break is basically a system reboot.",
-    "Some people can drink milk. Some people choose violence and then regret it.",
-    "A good flush is one of life's most underrated victories.",
-    "Morning coffee and morning bowel movements are business partners.",
-    "Toilet paper orientation arguments have destroyed friendships.",
-    "Cold weather can make you pee more and question your life choices.",
-    "The phrase 'brb restroom' hides far more drama than it appears to.",
-    "Your best ideas often arrive either in the shower or on the toilet. Science is still processing this.",
-    "The longer the meeting, the more heroic the bladder control stories.",
-    "A clean restroom is the closest thing to office luxury.",
-    "Stomach bubbles during a quiet elevator ride are never a good omen.",
-    "Hydration, fiber, and movement remain the holy trinity of bathroom harmony.",
-    "You can absolutely have a favorite sink. We all do.",
-    "The emergency courtesy flush is a high-skill tactical maneuver.",
-    "There is no confidence like leaving a restroom knowing it smells exactly normal.",
-    "The sentence 'I should not have eaten that' is usually followed by speed.",
-    "Every office has one restroom everyone avoids for mysterious reasons.",
-    "A well-timed bathroom break can save you from replying-all mistakes.",
-    "Toilets are civilization's MVP and still somehow underappreciated.",
-    "The words 'out of order' on a restroom door can trigger primal panic.",
-    "Most people can identify a cheap paper towel from six feet away.",
-    "A strategic restroom walk can reset your mood faster than doomscrolling.",
-    "Digestive peace is priceless, but this site still calculates it in dollars.",
-    "Your pee schedule on travel days is mostly controlled by traffic and bad decisions.",
-    "The sound of someone aggressively unrolling toilet paper is pure cinematic tension.",
-    "Nothing humbles a person faster than a bathroom with no hooks, no shelf, and no mercy.",
-    "The human body is 60% water and 100% dramatic about bathroom timing."
+    { category: "office", text: "Most offices have one restroom everyone calls 'the good one' in hushed tones." },
+    { category: "office", text: "The fastest way to clear your desk area is saying, 'brb, emergency restroom mission.'" },
+    { category: "office", text: "A bathroom break right before a pointless meeting is advanced time management." },
+    { category: "office", text: "Someone is definitely doing mini therapy sessions in the office restroom mirror." },
+    { category: "office", text: "The best stall is never an accident. It is earned through pattern recognition." },
+    { category: "office", text: "The phrase 'quick break' has no legal meaning once your phone comes out." },
+    { category: "office", text: "Office bathroom acoustics can make a cough sound like a courtroom objection." },
+    { category: "office", text: "The person who replaces an empty toilet roll is an unsung workplace hero." },
+    { category: "office", text: "Hand dryers and conference mics share a passion for aggressive noise." },
+    { category: "office", text: "A strategic restroom lap can save you from replying-all while emotional." },
+    { category: "office", text: "Your favorite sink location says more about you than most personality tests." },
+    { category: "office", text: "Coworkers remember who never washes hands. The gossip is permanent." },
+    { category: "office", text: "A clean office restroom can boost morale more than a motivational poster." },
+    { category: "office", text: "If the paper towel dispenser works on first try, buy a lottery ticket." },
+    { category: "office", text: "The office bathroom is where small talk goes to die and peace is reborn." },
+
+    { category: "coffee", text: "Coffee is not your enemy, but it definitely sends calendar invites to your colon." },
+    { category: "coffee", text: "Espresso and urgency have one of the strongest partnerships in nature." },
+    { category: "coffee", text: "A second cold brew before lunch is a confidence move with consequences." },
+    { category: "coffee", text: "Your gut can detect latte choices faster than your taste buds can." },
+    { category: "coffee", text: "Caffeine: because calm mornings are apparently overrated." },
+    { category: "coffee", text: "The phrase 'just one more sip' has launched many emergency speed walks." },
+    { category: "coffee", text: "Some people drink decaf. Some people race fate." },
+    { category: "coffee", text: "Iced coffee in winter is proof humans enjoy complicated problems." },
+    { category: "coffee", text: "Coffee does not ruin your day. It simply edits your bathroom schedule." },
+    { category: "coffee", text: "A risky burrito plus cold brew is a chemistry experiment, not a lunch." },
+    { category: "coffee", text: "Your mug says 'calm'. Your digestive system says 'go now'." },
+    { category: "coffee", text: "There is no truer phrase than 'I should not have gotten the large'." },
+
+    { category: "science", text: "Your bladder starts with polite reminders, then escalates like a fire alarm." },
+    { category: "science", text: "Humans are about 60% water and 100% dramatic about restroom timing." },
+    { category: "science", text: "Pee color can change with hydration, vitamins, and your bold snack choices." },
+    { category: "science", text: "Your gut and brain are in constant group chat, and sometimes they panic together." },
+    { category: "science", text: "Fiber is basically project management for your digestive timeline." },
+    { category: "science", text: "Your colon is a logistics department that never gets a holiday party." },
+    { category: "science", text: "Stress can send you to the restroom faster than a calendar reminder." },
+    { category: "science", text: "A normal bathroom rhythm varies a lot, despite what your friend claims." },
+    { category: "science", text: "Hydration helps, but drinking water 4 minutes before a road trip is still reckless." },
+    { category: "science", text: "Cold weather can make some people pee more and question every life decision." },
+    { category: "science", text: "Your digestive system has excellent memory for terrible food decisions." },
+    { category: "science", text: "The sentence 'trust your gut' is often literal and time-sensitive." },
+    { category: "science", text: "Physical movement helps digestion, even if that movement is just a nervous pace." },
+    { category: "science", text: "Morning routines are the secret script behind many bathroom timelines." },
+
+    { category: "history", text: "People engineered flushing toilets centuries ago and still celebrate every clean flush." },
+    { category: "history", text: "Ancient sanitation upgrades changed public health more than most history classes mention." },
+    { category: "history", text: "Toilet design has always reflected status, technology, and strong opinions." },
+    { category: "history", text: "Human civilization is basically roads, plumbing, and arguing about bathroom etiquette." },
+    { category: "history", text: "Public toilets are one of society's least glamorous but most important inventions." },
+    { category: "history", text: "Bidets are the underappreciated innovation people discover and evangelize forever." },
+    { category: "history", text: "The toilet paper roll was invented long before debates about over vs under ended." },
+    { category: "history", text: "Sewer systems are the quiet infrastructure legends behind modern city life." },
+    { category: "history", text: "Every era had bathroom drama. Ours just has better hashtags." },
+    { category: "history", text: "Toilet humor is older than modern comedy and somehow still undefeated." }
   ];
 
-  const factIndex = { value: -1 };
+  const factIndexByCategory = {};
   const posterIndex = { value: -1 };
+  const cursedPosterIndex = { value: -1 };
   const posterThemes = [
     {
       badge: "THRONE CERTIFIED",
@@ -665,6 +674,50 @@ function initFactsPage() {
       style: "theme-f"
     }
   ];
+  const cursedPosterThemes = [
+    {
+      badge: "CURSED EDITION",
+      title: "The Stall Chose You",
+      emoji: "🕳️🚽👁️",
+      subtitle: "You did not book this meeting. It booked you.",
+      style: "theme-cursed-a"
+    },
+    {
+      badge: "NIGHT SHIFT PORTAL",
+      title: "Flush At Your Own Risk",
+      emoji: "🌑💩⚠️",
+      subtitle: "Some sounds cannot be unheard.",
+      style: "theme-cursed-b"
+    },
+    {
+      badge: "VOID MAINTENANCE",
+      title: "Do Not Break Eye Contact",
+      emoji: "🚪🧻🫥",
+      subtitle: "The paper is watching.",
+      style: "theme-cursed-c"
+    },
+    {
+      badge: "DRAIN ORACLE",
+      title: "The Porcelain Knows",
+      emoji: "🌀🚽🔮",
+      subtitle: "It predicted your coffee decisions.",
+      style: "theme-cursed-d"
+    }
+  ];
+
+  function setStatus(text) {
+    if (status) status.textContent = text;
+  }
+
+  function activeCategory() {
+    return categorySelect.value || "all";
+  }
+
+  function getFactsForCategory() {
+    const category = activeCategory();
+    if (category === "all") return facts.map((f) => f.text);
+    return facts.filter((f) => f.category === category).map((f) => f.text);
+  }
 
   function renderFactCards(shuffled) {
     grid.innerHTML = "";
@@ -677,30 +730,83 @@ function initFactsPage() {
   }
 
   function shuffleFacts() {
-    const shuffled = [...facts].sort(() => Math.random() - 0.5);
+    const source = getFactsForCategory();
+    const shuffled = [...source].sort(() => Math.random() - 0.5);
+    if (factsCount) factsCount.textContent = String(source.length);
     renderFactCards(shuffled);
   }
 
   function showRandomFact() {
-    const choice = pickNonRepeatingRandom(facts, factIndex);
+    const category = activeCategory();
+    if (factIndexByCategory[category] === undefined) factIndexByCategory[category] = -1;
+    const ref = { value: factIndexByCategory[category] };
+    const choice = pickNonRepeatingRandom(getFactsForCategory(), ref);
+    factIndexByCategory[category] = ref.value;
     featured.textContent = choice.value;
   }
 
+  async function shareText(text, label) {
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: "Potty Pay", text });
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        throw new Error("Clipboard not supported");
+      }
+      setStatus(`${label} shared/copied.`);
+    } catch (error) {
+      setStatus(`Could not share ${label.toLowerCase()}.`);
+    }
+  }
+
   function generatePoster() {
-    const choice = pickNonRepeatingRandom(posterThemes, posterIndex).value;
+    const cursed = cursedMode && cursedMode.checked;
+    const pool = cursed ? cursedPosterThemes : posterThemes;
+    const indexRef = cursed ? cursedPosterIndex : posterIndex;
+    const choice = pickNonRepeatingRandom(pool, indexRef).value;
     if (!choice) return;
 
-    posterCard.classList.remove("theme-a", "theme-b", "theme-c", "theme-d", "theme-e", "theme-f");
+    posterCard.classList.remove(
+      "theme-a",
+      "theme-b",
+      "theme-c",
+      "theme-d",
+      "theme-e",
+      "theme-f",
+      "theme-cursed-a",
+      "theme-cursed-b",
+      "theme-cursed-c",
+      "theme-cursed-d"
+    );
     posterCard.classList.add(choice.style);
     if (posterBadge) posterBadge.textContent = choice.badge;
     if (posterTitle) posterTitle.textContent = choice.title;
     if (posterEmoji) posterEmoji.textContent = choice.emoji;
     if (posterSubtitle) posterSubtitle.textContent = choice.subtitle;
+    setStatus(cursed ? "Cursed mode poster generated." : "Fresh poster generated.");
   }
 
   shuffleBtn.addEventListener("click", shuffleFacts);
   randomBtn.addEventListener("click", showRandomFact);
+  categorySelect.addEventListener("change", () => {
+    shuffleFacts();
+    showRandomFact();
+    setStatus(`Loaded ${categorySelect.options[categorySelect.selectedIndex].text}.`);
+  });
+  if (shareFactBtn) {
+    shareFactBtn.addEventListener("click", () => {
+      shareText(`Potty Fact: ${featured.textContent}`, "Fact");
+    });
+  }
   if (regenArtBtn) regenArtBtn.addEventListener("click", generatePoster);
+  if (cursedMode) cursedMode.addEventListener("change", generatePoster);
+  if (sharePosterBtn) {
+    sharePosterBtn.addEventListener("click", () => {
+      const text = `${posterTitle ? posterTitle.textContent : ""} — ${posterSubtitle ? posterSubtitle.textContent : ""}`;
+      shareText(`Potty Poster: ${text}`, "Poster");
+    });
+  }
 
   shuffleFacts();
   showRandomFact();

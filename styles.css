@@ -10,6 +10,7 @@
   --line: rgba(47, 31, 20, 0.2);
   --shadow: 0 16px 40px rgba(47, 31, 20, 0.17);
   --radius: 20px;
+  --surface-soft: rgba(255, 252, 244, 0.9);
 }
 
 * {
@@ -238,13 +239,15 @@ label {
   font-weight: 700;
 }
 
-input {
+input,
+select {
   width: 100%;
   border-radius: 10px;
   border: 1px solid var(--line);
-  background: rgba(255, 252, 244, 0.94);
+  background: var(--surface-soft);
   padding: 0.55rem;
   font: inherit;
+  color: var(--ink);
 }
 
 input[type="radio"] {
@@ -466,6 +469,30 @@ input[type="radio"] {
   flex-wrap: wrap;
 }
 
+.facts-toolbar {
+  margin-top: 0.35rem;
+  display: grid;
+  grid-template-columns: auto minmax(220px, 340px) auto;
+  gap: 0.7rem;
+  align-items: center;
+}
+
+.facts-toolbar label {
+  font-weight: 700;
+}
+
+.toggle-inline {
+  margin-top: 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 700;
+}
+
+.toggle-inline input {
+  width: auto;
+}
+
 .featured-fact {
   margin-top: 0.65rem;
   font-weight: 700;
@@ -560,6 +587,22 @@ input[type="radio"] {
   background: linear-gradient(130deg, #5a2416, #91422a 45%, #d87f4e);
 }
 
+.poster-card.theme-cursed-a {
+  background: linear-gradient(130deg, #0b0b0d, #2b1230 45%, #5f1a24);
+}
+
+.poster-card.theme-cursed-b {
+  background: linear-gradient(130deg, #0c1117, #203046 45%, #3f5d7c);
+}
+
+.poster-card.theme-cursed-c {
+  background: linear-gradient(130deg, #161412, #3a2b20 45%, #7e5a42);
+}
+
+.poster-card.theme-cursed-d {
+  background: linear-gradient(130deg, #121718, #29423e 45%, #3e6f67);
+}
+
 .site-footer {
   padding: 0.6rem 0 1.8rem;
   font-weight: 500;
@@ -599,6 +642,11 @@ input[type="radio"] {
     grid-template-columns: 1fr;
     align-items: stretch;
   }
+
+  .facts-toolbar {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
 }
 
 @media (max-width: 600px) {
@@ -620,5 +668,39 @@ input[type="radio"] {
   nav a {
     padding: 0.35rem 0.6rem;
     font-size: 0.9rem;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-1: #1c1813;
+    --bg-2: #2b221a;
+    --bg-3: #3a2b1f;
+    --ink: #f1dfc6;
+    --mint: #d2ba39;
+    --orange: #b6773d;
+    --teal: #d0b270;
+    --panel: rgba(44, 33, 25, 0.86);
+    --line: rgba(241, 223, 198, 0.22);
+    --shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+    --surface-soft: rgba(53, 40, 30, 0.92);
+  }
+
+  .backdrop {
+    background-image:
+      radial-gradient(circle at 16% 8%, rgba(228, 194, 88, 0.15), transparent 30%),
+      radial-gradient(circle at 82% 4%, rgba(85, 57, 34, 0.3), transparent 32%),
+      radial-gradient(circle at 48% 96%, rgba(39, 29, 20, 0.4), transparent 30%);
+  }
+
+  .btn-ghost,
+  nav a,
+  .chip {
+    background: rgba(57, 43, 31, 0.8);
+    color: var(--ink);
+  }
+
+  .featured-fact {
+    border-left-color: #c9914f;
   }
 }

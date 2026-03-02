@@ -23,8 +23,12 @@ An interactive, multi-page static website for estimating how much people earn wh
   - Annual earnings delta and winner indicator
 - Facts page (`facts.html`)
   - 50+ poop/pee/toilet facts in a funnier style
-  - Shuffle + random featured fact
+  - Shuffle + random featured fact with category filters
+  - Share/copy for featured facts
   - Generative potty poster generator
+  - Optional darkly cursed poster mode
+- Theme system
+  - Automatically follows visitor/browser `prefers-color-scheme` (light/dark)
 
 ## Local development
 
