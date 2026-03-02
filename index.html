@@ -78,11 +78,11 @@
               <input id="workdaysPerWeek" type="number" min="1" max="7" step="1" value="5" required />
             </label>
             <label>
-              Poop minutes per visit
+              Avg minutes per poop trip
               <input id="poopMinutesPerVisit" type="number" min="1" max="180" step="1" value="12" required />
             </label>
             <label>
-              Pee minutes per visit
+              Avg minutes per pee trip
               <input id="peeMinutesPerVisit" type="number" min="1" max="180" step="1" value="5" required />
             </label>
             <label>
@@ -93,6 +93,9 @@
               Poop visits per workday
               <input id="poopVisitsPerDay" type="number" min="0" max="20" step="1" value="1" required />
             </label>
+            <p class="small-note form-hint">
+              Combined poop+pee trips count as a poop trip. Use poop minutes as the full average time for those trips.
+            </p>
             <label>
               Weeks worked per year
               <input id="weeksPerYear" type="number" min="1" max="52" step="1" value="50" required />
