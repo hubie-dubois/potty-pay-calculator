@@ -1,71 +1,9 @@
-const DEFAULT_WEEKS = 52;
 const STORAGE_KEY = "potty_pay_lifetime";
-
-function money(value) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 2
-  }).format(value);
-}
-
-function readNum(value) {
-  return Number.parseFloat(value);
-}
-
-function validateBase(data) {
-  if (!Number.isFinite(data.hoursPerWeek) || data.hoursPerWeek <= 0) return "Hours/week must be > 0.";
-  if (!Number.isFinite(data.workdaysPerWeek) || data.workdaysPerWeek <= 0 || data.workdaysPerWeek > 7) {
-    return "Workdays/week must be 1-7.";
-  }
-  if (!Number.isFinite(data.minutesPerVisit) || data.minutesPerVisit <= 0) return "Minutes/visit must be > 0.";
-  if (!Number.isFinite(data.visitsPerDay) || data.visitsPerDay <= 0) return "Visits/day must be > 0.";
-  if (!Number.isFinite(data.weeksPerYear) || data.weeksPerYear <= 0 || data.weeksPerYear > 52) {
-    return "Weeks/year must be 1-52.";
-  }
-  if (data.payType === "hourly" && (!Number.isFinite(data.hourlyRate) || data.hourlyRate < 0)) {
-    return "Hourly rate must be >= 0.";
-  }
-  if (data.payType === "salary" && (!Number.isFinite(data.annualSalary) || data.annualSalary < 0)) {
-    return "Salary must be >= 0.";
-  }
-  return "";
-}
-
-function computeMetrics(data) {
-  const effectiveHourly =
-    data.payType === "salary"
-      ? data.annualSalary / (data.hoursPerWeek * Math.max(data.weeksPerYear, 1))
-      : data.hourlyRate;
-
-  const perMinute = effectiveHourly / 60;
-  const perVisit = perMinute * data.minutesPerVisit;
-  const perDay = perVisit * data.visitsPerDay;
-  const perWeek = perDay * data.workdaysPerWeek;
-  const perYear = perWeek * data.weeksPerYear;
-  const perMonth = perYear / 12;
-
-  return { effectiveHourly, perMinute, perVisit, perDay, perWeek, perMonth, perYear };
-}
-
-function annualEquivalents(yearly) {
-  return [
-    `${(yearly / 5.25).toFixed(0)} fancy coffees`,
-    `${(yearly / 14).toFixed(0)} food truck lunches`,
-    `${(yearly / 75).toFixed(1)} months of streaming bundles`,
-    `${(yearly / 1200).toFixed(2)} bargain weekend trips`
-  ];
-}
-
-function formatClock(totalSeconds) {
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-}
+const Engine = window.PottyPayEngine;
 
 function initCalculatorPage() {
   const form = document.getElementById("calculator-form");
-  if (!form) return;
+  if (!form || !Engine) return;
 
   const hourlyWrap = document.getElementById("hourlyWrap");
   const salaryWrap = document.getElementById("salaryWrap");
@@ -126,14 +64,14 @@ function initCalculatorPage() {
   function currentData() {
     return {
       payType: getPayType(),
-      hourlyRate: readNum(inputs.hourlyRate.value),
-      annualSalary: readNum(inputs.annualSalary.value),
-      hoursPerWeek: readNum(inputs.hoursPerWeek.value),
-      workdaysPerWeek: readNum(inputs.workdaysPerWeek.value),
-      minutesPerVisit: readNum(inputs.minutesPerVisit.value),
-      visitsPerDay: readNum(inputs.visitsPerDay.value),
-      poopPercent: readNum(inputs.poopPercent.value),
-      weeksPerYear: readNum(inputs.weeksPerYear.value)
+      hourlyRate: Engine.readNum(inputs.hourlyRate.value),
+      annualSalary: Engine.readNum(inputs.annualSalary.value),
+      hoursPerWeek: Engine.readNum(inputs.hoursPerWeek.value),
+      workdaysPerWeek: Engine.readNum(inputs.workdaysPerWeek.value),
+      minutesPerVisit: Engine.readNum(inputs.minutesPerVisit.value),
+      visitsPerDay: Engine.readNum(inputs.visitsPerDay.value),
+      poopPercent: Engine.readNum(inputs.poopPercent.value),
+      weeksPerYear: Engine.readNum(inputs.weeksPerYear.value)
     };
   }
 
@@ -152,7 +90,7 @@ function initCalculatorPage() {
 
   function renderLifetime() {
     const stored = Number.parseFloat(localStorage.getItem(STORAGE_KEY) || "0");
-    timer.lifetime.textContent = `Lifetime tracked throne earnings in this browser: ${money(stored)}`;
+    timer.lifetime.textContent = `Lifetime tracked throne earnings in this browser: ${Engine.money(stored)}`;
   }
 
   function saveLifetime(delta) {
@@ -163,39 +101,39 @@ function initCalculatorPage() {
 
   function render(metrics, data) {
     latestMetrics = metrics;
-    output.hourly.textContent = money(metrics.effectiveHourly);
-    output.visit.textContent = money(metrics.perVisit);
-    output.day.textContent = money(metrics.perDay);
-    output.week.textContent = money(metrics.perWeek);
-    output.month.textContent = money(metrics.perMonth);
-    output.year.textContent = money(metrics.perYear);
+    output.hourly.textContent = Engine.money(metrics.effectiveHourly);
+    output.visit.textContent = Engine.money(metrics.perVisit);
+    output.day.textContent = Engine.money(metrics.perDay);
+    output.week.textContent = Engine.money(metrics.perWeek);
+    output.month.textContent = Engine.money(metrics.perMonth);
+    output.year.textContent = Engine.money(metrics.perYear);
 
     const poopPct = clampPoopPercent(data.poopPercent);
     const peePct = 100 - poopPct;
     const poopYear = (metrics.perYear * poopPct) / 100;
     const peeYear = metrics.perYear - poopYear;
 
-    output.breakdown.textContent = `${money(poopYear)} from poop visits and ${money(peeYear)} from pee visits per year.`;
+    output.breakdown.textContent = `${Engine.money(poopYear)} from poop visits and ${Engine.money(peeYear)} from pee visits per year.`;
     output.poopBar.style.width = `${poopPct}%`;
     output.peeBar.style.width = `${peePct}%`;
 
     output.equivalents.innerHTML = "";
-    annualEquivalents(metrics.perYear).forEach((item) => {
+    Engine.annualEquivalents(metrics.perYear).forEach((item) => {
       const li = document.createElement("li");
       li.textContent = item;
       output.equivalents.appendChild(li);
     });
 
-    timer.meta.textContent = `Earning rate while seated: ${money(metrics.perMinute)} per minute.`;
+    timer.meta.textContent = `Earning rate while seated: ${Engine.money(metrics.perMinute)} per minute.`;
   }
 
   function recalc() {
     const data = currentData();
-    const error = validateBase(data);
+    const error = Engine.validateBase(data);
     calcError.textContent = error;
     if (error) return;
 
-    const metrics = computeMetrics(data);
+    const metrics = Engine.computeMetrics(data);
     render(metrics, data);
   }
 
@@ -208,10 +146,46 @@ function initCalculatorPage() {
 
   function applyPreset(name) {
     const presets = {
-      part: { payType: "hourly", hourlyRate: 22, hoursPerWeek: 20, workdaysPerWeek: 4, minutesPerVisit: 8, visitsPerDay: 2, poopPercent: 30, weeksPerYear: 48 },
-      classic: { payType: "hourly", hourlyRate: 31.5, hoursPerWeek: 40, workdaysPerWeek: 5, minutesPerVisit: 11, visitsPerDay: 3, poopPercent: 35, weeksPerYear: 50 },
-      grind: { payType: "salary", annualSalary: 115000, hoursPerWeek: 60, workdaysPerWeek: 6, minutesPerVisit: 14, visitsPerDay: 4, poopPercent: 40, weeksPerYear: 50 },
-      chaos: { payType: "hourly", hourlyRate: 29, hoursPerWeek: 45, workdaysPerWeek: 5, minutesPerVisit: 9, visitsPerDay: 6, poopPercent: 28, weeksPerYear: 50 }
+      part: {
+        payType: "hourly",
+        hourlyRate: 22,
+        hoursPerWeek: 20,
+        workdaysPerWeek: 4,
+        minutesPerVisit: 8,
+        visitsPerDay: 2,
+        poopPercent: 30,
+        weeksPerYear: 48
+      },
+      classic: {
+        payType: "hourly",
+        hourlyRate: 31.5,
+        hoursPerWeek: 40,
+        workdaysPerWeek: 5,
+        minutesPerVisit: 11,
+        visitsPerDay: 3,
+        poopPercent: 35,
+        weeksPerYear: 50
+      },
+      grind: {
+        payType: "salary",
+        annualSalary: 115000,
+        hoursPerWeek: 60,
+        workdaysPerWeek: 6,
+        minutesPerVisit: 14,
+        visitsPerDay: 4,
+        poopPercent: 40,
+        weeksPerYear: 50
+      },
+      chaos: {
+        payType: "hourly",
+        hourlyRate: 29,
+        hoursPerWeek: 45,
+        workdaysPerWeek: 5,
+        minutesPerVisit: 9,
+        visitsPerDay: 6,
+        poopPercent: 28,
+        weeksPerYear: 50
+      }
     };
 
     const preset = presets[name];
@@ -237,8 +211,8 @@ function initCalculatorPage() {
 
   function drawTimer() {
     const perSecond = latestMetrics ? latestMetrics.effectiveHourly / 3600 : 0;
-    timer.clock.textContent = formatClock(elapsed);
-    timer.earned.textContent = money(elapsed * perSecond);
+    timer.clock.textContent = Engine.formatClock(elapsed);
+    timer.earned.textContent = Engine.money(elapsed * perSecond);
   }
 
   function startTimer() {
@@ -292,22 +266,23 @@ function initCalculatorPage() {
 }
 
 function readScenario(form) {
+  if (!Engine) return null;
   return {
     payType: "hourly",
-    hourlyRate: readNum(form.elements.hourlyRate.value),
+    hourlyRate: Engine.readNum(form.elements.hourlyRate.value),
     annualSalary: 0,
-    hoursPerWeek: readNum(form.elements.hoursPerWeek.value),
-    workdaysPerWeek: readNum(form.elements.workdaysPerWeek.value),
-    minutesPerVisit: readNum(form.elements.minutesPerVisit.value),
-    visitsPerDay: readNum(form.elements.visitsPerDay.value),
-    weeksPerYear: readNum(form.elements.weeksPerYear.value)
+    hoursPerWeek: Engine.readNum(form.elements.hoursPerWeek.value),
+    workdaysPerWeek: Engine.readNum(form.elements.workdaysPerWeek.value),
+    minutesPerVisit: Engine.readNum(form.elements.minutesPerVisit.value),
+    visitsPerDay: Engine.readNum(form.elements.visitsPerDay.value),
+    weeksPerYear: Engine.readNum(form.elements.weeksPerYear.value)
   };
 }
 
 function initLabPage() {
   const formA = document.getElementById("scenarioA");
   const formB = document.getElementById("scenarioB");
-  if (!formA || !formB) return;
+  if (!formA || !formB || !Engine) return;
 
   const aYear = formA.querySelector("[data-year]");
   const bYear = formB.querySelector("[data-year]");
@@ -319,8 +294,8 @@ function initLabPage() {
     const aData = readScenario(formA);
     const bData = readScenario(formB);
 
-    const errA = validateBase(aData);
-    const errB = validateBase(bData);
+    const errA = Engine.validateBase(aData);
+    const errB = Engine.validateBase(bData);
 
     if (errA || errB) {
       winnerTitle.textContent = "Fix invalid numbers";
@@ -329,11 +304,11 @@ function initLabPage() {
       return;
     }
 
-    const a = computeMetrics(aData);
-    const b = computeMetrics(bData);
+    const a = Engine.computeMetrics(aData);
+    const b = Engine.computeMetrics(bData);
 
-    aYear.textContent = money(a.perYear);
-    bYear.textContent = money(b.perYear);
+    aYear.textContent = Engine.money(a.perYear);
+    bYear.textContent = Engine.money(b.perYear);
 
     const max = Math.max(a.perYear, b.perYear, 1);
     const delta = Math.abs(a.perYear - b.perYear);
@@ -349,7 +324,7 @@ function initLabPage() {
 
     const winner = a.perYear > b.perYear ? "Scenario A" : "Scenario B";
     winnerTitle.textContent = `${winner} wins`;
-    winnerText.textContent = `${winner} earns ${money(delta)} more per year during bathroom breaks.`;
+    winnerText.textContent = `${winner} earns ${Engine.money(delta)} more per year during bathroom breaks.`;
   }
 
   [formA, formB].forEach((form) => {
@@ -371,7 +346,3 @@ function initRevealStagger() {
 initRevealStagger();
 initCalculatorPage();
 initLabPage();
-
-if (DEFAULT_WEEKS !== 52) {
-  console.log("Weeks per year override active.");
-}

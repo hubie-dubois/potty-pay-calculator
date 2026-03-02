@@ -25,6 +25,14 @@ An interactive, multi-page static website for estimating how much people earn wh
 
 This is a no-build static site. Open `index.html` in any modern browser.
 
+## Automated checks
+
+Run calculator engine tests:
+
+```bash
+npm test
+```
+
 ## Deployment
 
 Hosted with GitHub Pages from branch `main` and root (`/`).
