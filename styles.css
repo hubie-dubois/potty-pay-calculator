@@ -56,7 +56,8 @@ body {
 .brand {
   text-decoration: none;
   color: var(--ink);
-  font-family: "Rubik Mono One", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 800;
   font-size: 1.1rem;
 }
 
@@ -107,8 +108,10 @@ main {
 h1,
 h2,
 h3 {
-  font-family: "Rubik Mono One", sans-serif;
-  line-height: 1.15;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.2px;
 }
 
 h1 {
@@ -341,7 +344,8 @@ input[type="radio"] {
 .timer-clock,
 .timer-earned {
   margin: 0;
-  font-family: "Rubik Mono One", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 800;
 }
 
 .timer-clock {
@@ -461,7 +465,8 @@ input[type="radio"] {
 }
 
 .leaderboard-table th {
-  font-family: "Rubik Mono One", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 800;
   font-size: 0.74rem;
 }
 

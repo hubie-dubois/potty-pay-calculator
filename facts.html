@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Fun facts about poop, pee, toilets, and workplace bathroom chaos."
+      content="Questionable bathroom allegations, toilet gossip, and highly suspicious restroom wisdom."
     />
-    <title>Potty Facts | Potty Pay Calculator</title>
+    <title>Bathroom Allegations | Potty Pay Calculator</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Space+Grotesk:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
@@ -31,25 +31,25 @@
 
     <main class="wrap">
       <section class="hero reveal compact">
-        <p class="tag">Bathroom Curiosity Department</p>
-        <h1>Poop + Pee Facts</h1>
+        <p class="tag">Bathroom Allegation Bureau</p>
+        <h1>Unverified Poop & Pee Lore</h1>
         <p>
-          The internet needed a page dedicated to weirdly fascinating restroom trivia,
-          toilet lore, and absurdly specific bathroom wisdom. So here we are.
+          These are not serious scientific claims. These are restroom rumors, toilet gossip,
+          and aggressively unserious bathroom observations.
         </p>
       </section>
 
       <section class="panel reveal">
         <div class="facts-head">
-          <h2>Interesting Bathroom Facts</h2>
+          <h2>Questionable Bathroom Allegations</h2>
           <div class="hero-actions">
-            <button id="shuffleFacts" type="button" class="btn">Shuffle Facts</button>
-            <button id="randomFact" type="button" class="btn btn-ghost">Give Me One Random Fact</button>
-            <button id="shareFact" type="button" class="btn btn-ghost">Share This Fact</button>
+            <button id="shuffleFacts" type="button" class="btn">Shuffle Allegations</button>
+            <button id="randomFact" type="button" class="btn btn-ghost">Give Me One Random Allegation</button>
+            <button id="shareFact" type="button" class="btn btn-ghost">Share This Allegation</button>
           </div>
         </div>
         <div class="facts-toolbar">
-          <label for="factCategory">Fact category</label>
+          <label for="factCategory">Allegation category</label>
           <select id="factCategory">
             <option value="all">All chaos</option>
             <option value="office">Office Stall Lore</option>
@@ -60,8 +60,15 @@
           <p class="small-note">Available in this category: <span id="factsCount">0</span></p>
         </div>
         <p id="factsStatus" class="small-note" aria-live="polite"></p>
-        <p id="featuredFact" class="featured-fact">Tap "Give Me One Random Fact" to start.</p>
+        <p id="featuredFact" class="featured-fact">Tap "Give Me One Random Allegation" to start.</p>
         <div id="factsGrid" class="facts-grid" aria-live="polite"></div>
+      </section>
+
+      <section class="panel reveal">
+        <h2>Daily Potty Fortune</h2>
+        <p id="fortuneText"></p>
+        <p class="small-note">Fortune vault size: <span id="fortuneCount">0</span></p>
+        <button id="newFortune" type="button" class="btn btn-ghost">Generate New Fortune</button>
       </section>
 
       <section class="panel reveal">
@@ -88,7 +95,7 @@
     </main>
 
     <footer class="wrap site-footer">
-      <p>Fun facts for entertainment and general education. Not medical advice.</p>
+      <p>These allegations are mostly jokes and vibes, not peer-reviewed truth.</p>
       <p class="small-note">Want to compete? <a href="leaderboard.html">Visit Global Leaderboard</a>.</p>
     </footer>
 
