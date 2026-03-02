@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A humorous but practical calculator for estimating how much you earn during bathroom breaks at work."
+    />
+    <title>Potty Pay Calculator | Earn While You Go</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bungee:wght@400&family=Public+Sans:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="noise"></div>
+    <header class="hero">
+      <p class="eyebrow">Office Economics • Restroom Edition</p>
+      <h1>Potty Pay Calculator</h1>
+      <p class="lead">
+        Your paycheck does not clock out when nature calls. Estimate exactly how much
+        your throne time is worth whether you are hourly, salaried, part-time, or
+        pulling 60-hour weeks.
+      </p>
+      <a href="#calculator" class="cta">Calculate Your Porcelain Profits</a>
+    </header>
+
+    <main>
+      <section class="cards" aria-label="Quick highlights">
+        <article class="card">
+          <h2>Hourly?</h2>
+          <p>
+            Plug in your hourly rate and see earnings per break, day, week, month, and year.
+          </p>
+        </article>
+        <article class="card">
+          <h2>Salaried?</h2>
+          <p>
+            Enter annual salary plus weekly hours. We convert it into an effective hourly rate.
+          </p>
+        </article>
+        <article class="card">
+          <h2>Flexible Hours</h2>
+          <p>
+            Works for any weekly schedule from 1 to 100+ hours, including 20 and 60.
+          </p>
+        </article>
+      </section>
+
+      <section id="calculator" class="calculator" aria-labelledby="calc-title">
+        <div class="panel">
+          <h2 id="calc-title">Calculate Your Earnings While You Handle Business</h2>
+          <form id="pay-form" novalidate>
+            <fieldset class="pay-type" aria-label="Compensation type">
+              <legend>How are you paid?</legend>
+              <label>
+                <input type="radio" name="payType" value="hourly" checked /> Hourly
+              </label>
+              <label>
+                <input type="radio" name="payType" value="salary" /> Salary
+              </label>
+            </fieldset>
+
+            <div class="grid">
+              <label id="hourly-rate-field">
+                Hourly Rate ($)
+                <input type="number" id="hourlyRate" min="0" step="0.01" value="25" required />
+              </label>
+
+              <label id="salary-field" class="hidden">
+                Annual Salary ($)
+                <input type="number" id="annualSalary" min="0" step="1" value="60000" />
+              </label>
+
+              <label>
+                Hours Worked Per Week
+                <input type="number" id="hoursPerWeek" min="1" max="120" step="0.5" value="40" required />
+              </label>
+
+              <label>
+                Bathroom Minutes Per Visit
+                <input type="number" id="minutesPerVisit" min="1" max="180" step="1" value="10" required />
+              </label>
+
+              <label>
+                Visits Per Workday
+                <input type="number" id="visitsPerDay" min="1" max="20" step="1" value="2" required />
+              </label>
+
+              <label>
+                Workdays Per Week
+                <input type="number" id="workdaysPerWeek" min="1" max="7" step="1" value="5" required />
+              </label>
+            </div>
+
+            <button type="submit">Show My Potty Pay</button>
+            <p id="form-error" class="error" role="alert" aria-live="polite"></p>
+          </form>
+        </div>
+
+        <div class="panel results" aria-live="polite">
+          <h3>Your Throne-Time Earnings</h3>
+          <dl>
+            <div>
+              <dt>Effective Hourly Rate</dt>
+              <dd id="effectiveHourly">$0.00</dd>
+            </div>
+            <div>
+              <dt>Per Visit</dt>
+              <dd id="perVisit">$0.00</dd>
+            </div>
+            <div>
+              <dt>Per Workday</dt>
+              <dd id="perDay">$0.00</dd>
+            </div>
+            <div>
+              <dt>Per Week</dt>
+              <dd id="perWeek">$0.00</dd>
+            </div>
+            <div>
+              <dt>Per Month (avg)</dt>
+              <dd id="perMonth">$0.00</dd>
+            </div>
+            <div>
+              <dt>Per Year</dt>
+              <dd id="perYear">$0.00</dd>
+            </div>
+            <div>
+              <dt>Bathroom Time Per Week</dt>
+              <dd id="bathroomTime">0h 0m</dd>
+            </div>
+          </dl>
+          <p id="summary" class="summary"></p>
+        </div>
+      </section>
+
+      <section class="faq" aria-labelledby="faq-title">
+        <h2 id="faq-title">Frequently Asked Number-Two Questions</h2>
+        <details>
+          <summary>Does this work for 20-hour part-time schedules?</summary>
+          <p>Yes. Set weekly hours to 20 and workdays to whatever you actually work.</p>
+        </details>
+        <details>
+          <summary>What about 60-hour weeks?</summary>
+          <p>Also yes. The calculator is built for overtime-heavy schedules too.</p>
+        </details>
+        <details>
+          <summary>Is this tax-adjusted?</summary>
+          <p>
+            No. Values are gross earnings estimates so you can compare time value consistently.
+          </p>
+        </details>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        Built for educational entertainment and healthy workplace curiosity.
+      </p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
