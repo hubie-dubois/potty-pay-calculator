@@ -27,7 +27,16 @@ create table if not exists public.leaderboard_entries (
       ) / 60.0
     ) * minutes_per_visit * visits_per_day * workdays_per_week
   ) stored,
-  score_yearly numeric generated always as (score_weekly * weeks_per_year) stored,
+  score_yearly numeric generated always as (
+    (
+      (
+        case
+          when pay_type = 'salary' then annual_salary / (hours_per_week * weeks_per_year)
+          else hourly_rate
+        end
+      ) / 60.0
+    ) * minutes_per_visit * visits_per_day * workdays_per_week * weeks_per_year
+  ) stored,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
