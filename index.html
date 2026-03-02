@@ -23,7 +23,7 @@
       <nav>
         <a href="#calculator">Calculator</a>
         <a href="#session">Session Timer</a>
-        <a href="#leaderboard">Leaderboard</a>
+        <a href="leaderboard.html">Leaderboard</a>
         <a href="facts.html">Facts</a>
         <a href="lab.html">Poop Pay Lab</a>
       </nav>
@@ -177,50 +177,7 @@
         <p id="fortuneText"></p>
         <p class="small-note">Fortune vault size: <span id="fortuneCount">0</span></p>
         <button id="newFortune" class="btn btn-ghost">Generate New Fortune</button>
-      </section>
-
-      <section id="leaderboard" class="panel reveal">
-        <h2>Global Potty Leaderboard</h2>
-        <p class="small-note">
-          Free-mode leaderboard powered by Supabase. Submit your calculator profile and compete globally.
-        </p>
-
-        <form id="leaderboardForm" class="leaderboard-form" novalidate>
-          <label>
-            Display name
-            <input id="lbName" type="text" minlength="2" maxlength="24" value="Captain Flush" required />
-          </label>
-          <label>
-            Region (optional)
-            <input id="lbRegion" type="text" maxlength="24" value="USA" />
-          </label>
-          <button type="submit" class="btn">Submit Current Calculator Score</button>
-          <p id="lbMessage" class="small-note" role="status" aria-live="polite"></p>
-        </form>
-
-        <div class="leaderboard-tabs" role="tablist" aria-label="Leaderboard period tabs">
-          <button class="chip lb-tab active" data-period="all" role="tab" aria-selected="true">All-time</button>
-          <button class="chip lb-tab" data-period="month" role="tab" aria-selected="false">This month</button>
-        </div>
-
-        <div class="table-wrap">
-          <table class="leaderboard-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Region</th>
-                <th>Yearly</th>
-                <th>Updated</th>
-              </tr>
-            </thead>
-            <tbody id="leaderboardRows">
-              <tr>
-                <td colspan="5">Configure Supabase to load the global leaderboard.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <p class="small-note">Want to compete? <a href="leaderboard.html">Open Global Leaderboard</a>.</p>
       </section>
     </main>
 

@@ -25,6 +25,10 @@ An interactive, multi-page static website for estimating how much people earn wh
   - 50+ poop/pee/toilet facts in a funnier style
   - Shuffle + random featured fact with category filters
   - Share/copy for featured facts
+- Leaderboard page (`leaderboard.html`)
+  - Dedicated global leaderboard page
+  - Standalone submission profile (hourly/salary + schedule inputs)
+  - All-time and monthly ranking tabs
 - Theme system
   - Automatically follows visitor/browser `prefers-color-scheme` (light/dark)
 

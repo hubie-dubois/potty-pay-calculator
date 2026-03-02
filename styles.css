@@ -426,6 +426,10 @@ input[type="radio"] {
   align-items: end;
 }
 
+.leaderboard-form-wide {
+  margin-top: 0.75rem;
+}
+
 .leaderboard-tabs {
   margin-top: 0.8rem;
   display: flex;

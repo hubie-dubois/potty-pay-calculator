@@ -360,9 +360,56 @@ function initLeaderboard() {
 
   const supabase = getSupabaseClient();
   let activePeriod = "all";
+  const lbPayType = form.querySelectorAll('input[name="lbPayType"]');
+  const lbHourlyWrap = document.getElementById("lbHourlyWrap");
+  const lbSalaryWrap = document.getElementById("lbSalaryWrap");
+  const lbHourlyRate = document.getElementById("lbHourlyRate");
+  const lbAnnualSalary = document.getElementById("lbAnnualSalary");
+  const lbHoursPerWeek = document.getElementById("lbHoursPerWeek");
+  const lbWorkdaysPerWeek = document.getElementById("lbWorkdaysPerWeek");
+  const lbMinutesPerVisit = document.getElementById("lbMinutesPerVisit");
+  const lbVisitsPerDay = document.getElementById("lbVisitsPerDay");
+  const lbWeeksPerYear = document.getElementById("lbWeeksPerYear");
+
+  const hasStandaloneProfile =
+    lbPayType.length > 0 &&
+    lbHoursPerWeek &&
+    lbWorkdaysPerWeek &&
+    lbMinutesPerVisit &&
+    lbVisitsPerDay &&
+    lbWeeksPerYear;
 
   function setMessage(text) {
     if (msg) msg.textContent = text;
+  }
+
+  function getPayTypeFromForm() {
+    const selected = Array.from(lbPayType).find((radio) => radio.checked);
+    return selected ? selected.value : "hourly";
+  }
+
+  function togglePayTypeFields() {
+    if (!hasStandaloneProfile || !lbHourlyWrap || !lbSalaryWrap) return;
+    const isHourly = getPayTypeFromForm() === "hourly";
+    lbHourlyWrap.classList.toggle("hidden", !isHourly);
+    lbSalaryWrap.classList.toggle("hidden", isHourly);
+    if (lbHourlyRate) lbHourlyRate.required = isHourly;
+    if (lbAnnualSalary) lbAnnualSalary.required = !isHourly;
+  }
+
+  function readStandaloneProfile() {
+    if (!hasStandaloneProfile) return null;
+    const data = {
+      payType: getPayTypeFromForm(),
+      hourlyRate: Engine.readNum(lbHourlyRate ? lbHourlyRate.value : "0"),
+      annualSalary: Engine.readNum(lbAnnualSalary ? lbAnnualSalary.value : "0"),
+      hoursPerWeek: Engine.readNum(lbHoursPerWeek.value),
+      workdaysPerWeek: Engine.readNum(lbWorkdaysPerWeek.value),
+      minutesPerVisit: Engine.readNum(lbMinutesPerVisit.value),
+      visitsPerDay: Engine.readNum(lbVisitsPerDay.value),
+      weeksPerYear: Engine.readNum(lbWeeksPerYear.value)
+    };
+    return data;
   }
 
   function setRows(data) {
@@ -416,11 +463,6 @@ function initLeaderboard() {
       return;
     }
 
-    if (!appState.currentData || !appState.currentMetrics) {
-      setMessage("Run calculator first.");
-      return;
-    }
-
     if (!canSubmitLeaderboard()) {
       setMessage("Cooldown active. Wait 15 seconds before submitting again.");
       return;
@@ -434,7 +476,24 @@ function initLeaderboard() {
       return;
     }
 
-    const data = appState.currentData;
+    let data = null;
+    if (hasStandaloneProfile) {
+      data = readStandaloneProfile();
+      const error = Engine.validateBase(data);
+      if (error) {
+        setMessage(error);
+        return;
+      }
+    } else if (appState.currentData) {
+      data = appState.currentData;
+    }
+
+    if (!data) {
+      setMessage("No calculator profile found for submission.");
+      return;
+    }
+
+    const metrics = Engine.computeMetrics(data);
     const payload = {
       display_name: displayName,
       region,
@@ -458,7 +517,7 @@ function initLeaderboard() {
     }
 
     markLeaderboardSubmitNow();
-    setMessage(`Submitted. Your current yearly throne income: ${Engine.money(appState.currentMetrics.perYear)}`);
+    setMessage(`Submitted. Your current yearly throne income: ${Engine.money(metrics.perYear)}`);
     await loadLeaderboard();
   }
 
@@ -476,6 +535,12 @@ function initLeaderboard() {
   });
 
   form.addEventListener("submit", submitEntry);
+  if (hasStandaloneProfile) {
+    lbPayType.forEach((radio) => {
+      radio.addEventListener("change", togglePayTypeFields);
+    });
+    togglePayTypeFields();
+  }
   loadLeaderboard();
 }
 
@@ -664,9 +729,7 @@ function initFactsPage() {
 
   async function shareText(text, label) {
     try {
-      if (navigator.share) {
-        await navigator.share({ title: "Potty Pay", text });
-      } else if (navigator.clipboard) {
+      if (navigator.clipboard) {
         await navigator.clipboard.writeText(text);
       } else {
         window.prompt("Copy this text:", text);
