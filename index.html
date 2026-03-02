@@ -5,162 +5,180 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="A humorous but practical calculator for estimating how much you earn during bathroom breaks at work."
+      content="The internet's most entertaining calculator for poop, pee, and paid bathroom breaks on company time."
     />
-    <title>Potty Pay Calculator | Earn While You Go</title>
+    <title>Potty Pay Calculator | Company Dime Edition</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bungee:wght@400&family=Public+Sans:wght@400;500;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Space+Grotesk:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="noise"></div>
-    <header class="hero">
-      <p class="eyebrow">Office Economics • Restroom Edition</p>
-      <h1>Potty Pay Calculator</h1>
-      <p class="lead">
-        Your paycheck does not clock out when nature calls. Estimate exactly how much
-        your throne time is worth whether you are hourly, salaried, part-time, or
-        pulling 60-hour weeks.
-      </p>
-      <a href="#calculator" class="cta">Calculate Your Porcelain Profits</a>
+    <div class="backdrop" aria-hidden="true"></div>
+    <header class="site-header wrap">
+      <a class="brand" href="index.html">Potty Pay</a>
+      <nav>
+        <a href="#calculator">Calculator</a>
+        <a href="#session">Session Timer</a>
+        <a href="lab.html">Poop Pay Lab</a>
+      </nav>
     </header>
 
-    <main>
-      <section class="cards" aria-label="Quick highlights">
-        <article class="card">
-          <h2>Hourly?</h2>
-          <p>
-            Plug in your hourly rate and see earnings per break, day, week, month, and year.
-          </p>
-        </article>
-        <article class="card">
-          <h2>Salaried?</h2>
-          <p>
-            Enter annual salary plus weekly hours. We convert it into an effective hourly rate.
-          </p>
-        </article>
-        <article class="card">
-          <h2>Flexible Hours</h2>
-          <p>
-            Works for any weekly schedule from 1 to 100+ hours, including 20 and 60.
-          </p>
-        </article>
-      </section>
-
-      <section id="calculator" class="calculator" aria-labelledby="calc-title">
-        <div class="panel">
-          <h2 id="calc-title">Calculate Your Earnings While You Handle Business</h2>
-          <form id="pay-form" novalidate>
-            <fieldset class="pay-type" aria-label="Compensation type">
-              <legend>How are you paid?</legend>
-              <label>
-                <input type="radio" name="payType" value="hourly" checked /> Hourly
-              </label>
-              <label>
-                <input type="radio" name="payType" value="salary" /> Salary
-              </label>
-            </fieldset>
-
-            <div class="grid">
-              <label id="hourly-rate-field">
-                Hourly Rate ($)
-                <input type="number" id="hourlyRate" min="0" step="0.01" value="25" required />
-              </label>
-
-              <label id="salary-field" class="hidden">
-                Annual Salary ($)
-                <input type="number" id="annualSalary" min="0" step="1" value="60000" />
-              </label>
-
-              <label>
-                Hours Worked Per Week
-                <input type="number" id="hoursPerWeek" min="1" max="120" step="0.5" value="40" required />
-              </label>
-
-              <label>
-                Bathroom Minutes Per Visit
-                <input type="number" id="minutesPerVisit" min="1" max="180" step="1" value="10" required />
-              </label>
-
-              <label>
-                Visits Per Workday
-                <input type="number" id="visitsPerDay" min="1" max="20" step="1" value="2" required />
-              </label>
-
-              <label>
-                Workdays Per Week
-                <input type="number" id="workdaysPerWeek" min="1" max="7" step="1" value="5" required />
-              </label>
-            </div>
-
-            <button type="submit">Show My Potty Pay</button>
-            <p id="form-error" class="error" role="alert" aria-live="polite"></p>
-          </form>
-        </div>
-
-        <div class="panel results" aria-live="polite">
-          <h3>Your Throne-Time Earnings</h3>
-          <dl>
-            <div>
-              <dt>Effective Hourly Rate</dt>
-              <dd id="effectiveHourly">$0.00</dd>
-            </div>
-            <div>
-              <dt>Per Visit</dt>
-              <dd id="perVisit">$0.00</dd>
-            </div>
-            <div>
-              <dt>Per Workday</dt>
-              <dd id="perDay">$0.00</dd>
-            </div>
-            <div>
-              <dt>Per Week</dt>
-              <dd id="perWeek">$0.00</dd>
-            </div>
-            <div>
-              <dt>Per Month (avg)</dt>
-              <dd id="perMonth">$0.00</dd>
-            </div>
-            <div>
-              <dt>Per Year</dt>
-              <dd id="perYear">$0.00</dd>
-            </div>
-            <div>
-              <dt>Bathroom Time Per Week</dt>
-              <dd id="bathroomTime">0h 0m</dd>
-            </div>
-          </dl>
-          <p id="summary" class="summary"></p>
+    <main class="wrap">
+      <section class="hero reveal">
+        <p class="tag">Workplace Finance, Restroom Department</p>
+        <h1>Get paid while you poop and pee</h1>
+        <p>
+          A wildly detailed calculator for bathroom earnings at work. Hourly, salary,
+          part-time, overtime, chaos-time, all covered.
+        </p>
+        <div class="hero-actions">
+          <a class="btn" href="#calculator">Compute My Throne Income</a>
+          <a class="btn btn-ghost" href="lab.html">Compare Scenarios</a>
         </div>
       </section>
 
-      <section class="faq" aria-labelledby="faq-title">
-        <h2 id="faq-title">Frequently Asked Number-Two Questions</h2>
-        <details>
-          <summary>Does this work for 20-hour part-time schedules?</summary>
-          <p>Yes. Set weekly hours to 20 and workdays to whatever you actually work.</p>
-        </details>
-        <details>
-          <summary>What about 60-hour weeks?</summary>
-          <p>Also yes. The calculator is built for overtime-heavy schedules too.</p>
-        </details>
-        <details>
-          <summary>Is this tax-adjusted?</summary>
-          <p>
-            No. Values are gross earnings estimates so you can compare time value consistently.
-          </p>
-        </details>
+      <section class="quick-stats reveal" aria-label="Highlights">
+        <article>
+          <h2>Hourly + Salary</h2>
+          <p>Converts salary into effective hourly pay before calculations.</p>
+        </article>
+        <article>
+          <h2>20 to 60+ hrs/week</h2>
+          <p>Built for part-time schedules and heavy overtime lives.</p>
+        </article>
+        <article>
+          <h2>Live toilet timer</h2>
+          <p>Track real-time earnings during each glorious break.</p>
+        </article>
+      </section>
+
+      <section id="calculator" class="panel reveal">
+        <div class="panel-head">
+          <h2>Ultimate Potty Pay Calculator</h2>
+          <div class="preset-row" role="group" aria-label="Presets">
+            <button class="chip" data-preset="part">Part-time 20h</button>
+            <button class="chip" data-preset="classic">Standard 40h</button>
+            <button class="chip" data-preset="grind">Grind Mode 60h</button>
+            <button class="chip" data-preset="chaos">Coffee Goblin</button>
+          </div>
+        </div>
+
+        <form id="calculator-form" novalidate>
+          <fieldset class="toggle-row">
+            <legend>Pay type</legend>
+            <label><input type="radio" name="payType" value="hourly" checked /> Hourly</label>
+            <label><input type="radio" name="payType" value="salary" /> Salary</label>
+          </fieldset>
+
+          <div class="form-grid">
+            <label id="hourlyWrap">
+              Hourly rate ($)
+              <input id="hourlyRate" type="number" min="0" step="0.01" value="31.5" required />
+            </label>
+            <label id="salaryWrap" class="hidden">
+              Annual salary ($)
+              <input id="annualSalary" type="number" min="0" step="1" value="78000" />
+            </label>
+            <label>
+              Hours worked per week
+              <input id="hoursPerWeek" type="number" min="1" max="120" step="0.5" value="40" required />
+            </label>
+            <label>
+              Workdays per week
+              <input id="workdaysPerWeek" type="number" min="1" max="7" step="1" value="5" required />
+            </label>
+            <label>
+              Bathroom minutes per visit
+              <input id="minutesPerVisit" type="number" min="1" max="180" step="1" value="11" required />
+            </label>
+            <label>
+              Visits per workday
+              <input id="visitsPerDay" type="number" min="1" max="20" step="1" value="3" required />
+            </label>
+            <label>
+              Poop visits (%)
+              <input id="poopPercent" type="number" min="0" max="100" step="1" value="35" required />
+            </label>
+            <label>
+              Weeks worked per year
+              <input id="weeksPerYear" type="number" min="1" max="52" step="1" value="50" required />
+            </label>
+          </div>
+          <p id="calcError" class="error" role="alert" aria-live="polite"></p>
+        </form>
+
+        <div class="results-grid" aria-live="polite">
+          <article>
+            <h3>Effective hourly</h3>
+            <p id="rHourly" class="value">$0.00</p>
+          </article>
+          <article>
+            <h3>Per visit</h3>
+            <p id="rVisit" class="value">$0.00</p>
+          </article>
+          <article>
+            <h3>Per workday</h3>
+            <p id="rDay" class="value">$0.00</p>
+          </article>
+          <article>
+            <h3>Per week</h3>
+            <p id="rWeek" class="value">$0.00</p>
+          </article>
+          <article>
+            <h3>Per month</h3>
+            <p id="rMonth" class="value">$0.00</p>
+          </article>
+          <article>
+            <h3>Per year</h3>
+            <p id="rYear" class="value">$0.00</p>
+          </article>
+        </div>
+
+        <div class="split reveal">
+          <article class="sub-panel">
+            <h3>Poop vs Pee Breakdown</h3>
+            <p id="breakdownText"></p>
+            <div class="bar">
+              <span id="poopBar"></span>
+              <span id="peeBar"></span>
+            </div>
+          </article>
+          <article class="sub-panel">
+            <h3>Annual Equivalents</h3>
+            <ul id="equivalents"></ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="session" class="panel reveal">
+        <h2>Live Throne Session Timer</h2>
+        <p>Start the timer when you sit down. Stop when your legs go numb.</p>
+        <div class="timer-box">
+          <p id="timerClock" class="timer-clock">00:00</p>
+          <p id="timerEarned" class="timer-earned">$0.00</p>
+          <p id="timerMeta" class="timer-meta">Based on your current effective hourly rate.</p>
+          <div class="timer-actions">
+            <button id="startTimer" class="btn">Start</button>
+            <button id="stopTimer" class="btn btn-ghost">Stop</button>
+            <button id="resetTimer" class="btn btn-ghost">Reset</button>
+          </div>
+        </div>
+        <p id="lifetimeTotal" class="lifetime"></p>
+      </section>
+
+      <section class="panel reveal">
+        <h2>Daily Potty Fortune</h2>
+        <p id="fortuneText"></p>
+        <button id="newFortune" class="btn btn-ghost">Generate New Fortune</button>
       </section>
     </main>
 
-    <footer>
-      <p>
-        Built for educational entertainment and healthy workplace curiosity.
-      </p>
+    <footer class="wrap site-footer">
+      <p>Potty Pay Calculator. Built for science, laughs, and suspiciously profitable bathroom breaks.</p>
     </footer>
 
     <script src="script.js"></script>

@@ -1,31 +1,30 @@
 # Potty Pay Calculator
 
-A humorous, mobile-friendly static website that calculates how much employees earn while taking bathroom breaks at work.
+An interactive, multi-page static website for estimating how much people earn while taking bathroom breaks at work.
 
-## Features
+## Live site
 
-- Hourly and salary calculation modes
-- Supports any weekly schedule (including 20-hour part-time and 60-hour heavy-work weeks)
-- Estimates earnings per visit, day, week, month, and year
-- Calculates bathroom time spent per week
-- Responsive design for desktop and mobile
+- https://hubie-dubois.github.io/potty-pay-calculator/
 
-## Run locally
+## What's included
 
-Open `index.html` directly in a browser.
+- Main calculator page (`index.html`)
+  - Hourly + salary modes
+  - Supports variable schedules (20-hour, 40-hour, 60-hour+)
+  - Yearly/weekly/monthly/day/visit payout estimates
+  - Poop-vs-pee percentage breakdown
+  - Preset profiles
+  - Real-time throne session timer
+  - Local browser lifetime earnings tracker
+  - Random "potty fortune" generator
+- Comparison page (`lab.html`)
+  - Scenario A vs Scenario B showdown
+  - Annual earnings delta and winner indicator
 
-## GitHub Pages deployment
+## Local development
 
-1. Create a new GitHub repo named `potty-pay-calculator`.
-2. From this directory, run:
+This is a no-build static site. Open `index.html` in any modern browser.
 
-```bash
-git init
-git add .
-git commit -m "Initial commit: Potty Pay Calculator"
-git branch -M main
-git remote add origin git@github.com:<your-username>/potty-pay-calculator.git
-git push -u origin main
-```
+## Deployment
 
-3. In GitHub repo settings, enable Pages from branch `main` and root (`/`).
+Hosted with GitHub Pages from branch `main` and root (`/`).
