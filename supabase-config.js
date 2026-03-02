@@ -1,0 +1,2 @@
+window.POTTY_PAY_SUPABASE_URL = "";
+window.POTTY_PAY_SUPABASE_ANON_KEY = "";

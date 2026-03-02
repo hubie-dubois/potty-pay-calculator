@@ -1,5 +1,11 @@
 const STORAGE_KEY = "potty_pay_lifetime";
+const LEADERBOARD_COOLDOWN_KEY = "potty_pay_lb_last_submit";
 const Engine = window.PottyPayEngine;
+
+const appState = {
+  currentData: null,
+  currentMetrics: null
+};
 
 function initCalculatorPage() {
   const form = document.getElementById("calculator-form");
@@ -101,6 +107,9 @@ function initCalculatorPage() {
 
   function render(metrics, data) {
     latestMetrics = metrics;
+    appState.currentData = data;
+    appState.currentMetrics = metrics;
+
     output.hourly.textContent = Engine.money(metrics.effectiveHourly);
     output.visit.textContent = Engine.money(metrics.perVisit);
     output.day.textContent = Engine.money(metrics.perDay);
@@ -265,6 +274,160 @@ function initCalculatorPage() {
   window.addEventListener("beforeunload", stopTimer);
 }
 
+function getSupabaseClient() {
+  const hasLib = typeof window.supabase !== "undefined";
+  const url = window.POTTY_PAY_SUPABASE_URL || "";
+  const key = window.POTTY_PAY_SUPABASE_ANON_KEY || "";
+
+  if (!hasLib || !url || !key) return null;
+  return window.supabase.createClient(url, key);
+}
+
+function sanitizeName(value) {
+  return String(value || "").trim().slice(0, 24);
+}
+
+function canSubmitLeaderboard() {
+  const now = Date.now();
+  const last = Number.parseInt(localStorage.getItem(LEADERBOARD_COOLDOWN_KEY) || "0", 10);
+  return now - last >= 15000;
+}
+
+function markLeaderboardSubmitNow() {
+  localStorage.setItem(LEADERBOARD_COOLDOWN_KEY, String(Date.now()));
+}
+
+function initLeaderboard() {
+  const form = document.getElementById("leaderboardForm");
+  const rows = document.getElementById("leaderboardRows");
+  if (!form || !rows || !Engine) return;
+
+  const msg = document.getElementById("lbMessage");
+  const nameInput = document.getElementById("lbName");
+  const regionInput = document.getElementById("lbRegion");
+  const tabs = Array.from(document.querySelectorAll(".lb-tab"));
+
+  const supabase = getSupabaseClient();
+  let activePeriod = "all";
+
+  function setMessage(text) {
+    if (msg) msg.textContent = text;
+  }
+
+  function setRows(data) {
+    if (!data.length) {
+      rows.innerHTML = '<tr><td colspan="5">No entries yet. Be the first legend.</td></tr>';
+      return;
+    }
+
+    rows.innerHTML = "";
+    data.forEach((entry, idx) => {
+      const tr = document.createElement("tr");
+      const when = new Date(entry.updated_at).toLocaleDateString();
+      tr.innerHTML = `<td>${idx + 1}</td><td>${entry.display_name}</td><td>${entry.region || "-"}</td><td>${Engine.money(Number(entry.score_yearly || 0))}</td><td>${when}</td>`;
+      rows.appendChild(tr);
+    });
+  }
+
+  async function loadLeaderboard() {
+    if (!supabase) {
+      rows.innerHTML = '<tr><td colspan="5">Set `POTTY_PAY_SUPABASE_URL` and `POTTY_PAY_SUPABASE_ANON_KEY` in `supabase-config.js`.</td></tr>';
+      return;
+    }
+
+    let query = supabase
+      .from("leaderboard_entries")
+      .select("display_name,region,score_yearly,updated_at")
+      .order("score_yearly", { ascending: false })
+      .limit(25);
+
+    if (activePeriod === "month") {
+      const start = new Date();
+      start.setDate(1);
+      start.setHours(0, 0, 0, 0);
+      query = query.gte("updated_at", start.toISOString());
+    }
+
+    const { data, error } = await query;
+    if (error) {
+      rows.innerHTML = `<tr><td colspan="5">Leaderboard error: ${error.message}</td></tr>`;
+      return;
+    }
+
+    setRows(data || []);
+  }
+
+  async function submitEntry(event) {
+    event.preventDefault();
+
+    if (!supabase) {
+      setMessage("Supabase is not configured yet.");
+      return;
+    }
+
+    if (!appState.currentData || !appState.currentMetrics) {
+      setMessage("Run calculator first.");
+      return;
+    }
+
+    if (!canSubmitLeaderboard()) {
+      setMessage("Cooldown active. Wait 15 seconds before submitting again.");
+      return;
+    }
+
+    const displayName = sanitizeName(nameInput.value);
+    const region = sanitizeName(regionInput.value);
+
+    if (displayName.length < 2) {
+      setMessage("Display name must be at least 2 characters.");
+      return;
+    }
+
+    const data = appState.currentData;
+    const payload = {
+      display_name: displayName,
+      region,
+      pay_type: data.payType,
+      hourly_rate: Number(data.hourlyRate || 0),
+      annual_salary: Number(data.annualSalary || 0),
+      hours_per_week: Number(data.hoursPerWeek),
+      workdays_per_week: Number(data.workdaysPerWeek),
+      minutes_per_visit: Number(data.minutesPerVisit),
+      visits_per_day: Number(data.visitsPerDay),
+      weeks_per_year: Number(data.weeksPerYear)
+    };
+
+    setMessage("Submitting score...");
+
+    const { error } = await supabase.from("leaderboard_entries").insert(payload);
+
+    if (error) {
+      setMessage(`Submit failed: ${error.message}`);
+      return;
+    }
+
+    markLeaderboardSubmitNow();
+    setMessage(`Submitted. Your current yearly throne income: ${Engine.money(appState.currentMetrics.perYear)}`);
+    await loadLeaderboard();
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      tabs.forEach((t) => {
+        t.classList.remove("active");
+        t.setAttribute("aria-selected", "false");
+      });
+      tab.classList.add("active");
+      tab.setAttribute("aria-selected", "true");
+      activePeriod = tab.dataset.period;
+      loadLeaderboard();
+    });
+  });
+
+  form.addEventListener("submit", submitEntry);
+  loadLeaderboard();
+}
+
 function readScenario(form) {
   if (!Engine) return null;
   return {
@@ -345,4 +508,5 @@ function initRevealStagger() {
 
 initRevealStagger();
 initCalculatorPage();
+initLeaderboard();
 initLabPage();

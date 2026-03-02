@@ -17,6 +17,7 @@ An interactive, multi-page static website for estimating how much people earn wh
   - Real-time throne session timer
   - Local browser lifetime earnings tracker
   - Random "potty fortune" generator
+  - Global leaderboard UI (Supabase-backed, free tier)
 - Comparison page (`lab.html`)
   - Scenario A vs Scenario B showdown
   - Annual earnings delta and winner indicator
@@ -31,6 +32,19 @@ Run calculator engine tests:
 
 ```bash
 npm test
+
+## Free global leaderboard setup (Supabase)
+
+1. Create a free Supabase project.
+2. Open SQL editor and run: `leaderboard-schema.sql`
+3. Open `supabase-config.js` and set:
+   - `window.POTTY_PAY_SUPABASE_URL`
+   - `window.POTTY_PAY_SUPABASE_ANON_KEY`
+4. Commit/push. GitHub Pages will pick it up.
+
+Notes:
+- Leaderboard scores are calculated in the database using generated columns (`score_weekly`, `score_yearly`) so client submissions cannot directly set final score fields.
+- Current anti-spam protection includes strict database input checks plus a frontend 15-second submit cooldown.
 ```
 
 ## Deployment
