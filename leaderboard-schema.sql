@@ -38,6 +38,16 @@ create table if not exists public.leaderboard_entries (
       ) / 60.0
     ) * minutes_per_visit * visits_per_day * workdays_per_week * weeks_per_year
   ) stored,
+  score_daily numeric generated always as (
+    (
+      (
+        case
+          when pay_type = 'salary' then annual_salary / (hours_per_week * weeks_per_year)
+          else hourly_rate
+        end
+      ) / 60.0
+    ) * minutes_per_visit * visits_per_day
+  ) stored,
   bathroom_minutes_yearly numeric generated always as (
     minutes_per_visit * visits_per_day * workdays_per_week * weeks_per_year
   ) stored,
@@ -81,6 +91,8 @@ create index if not exists idx_leaderboard_entries_score_yearly_desc
   on public.leaderboard_entries (score_yearly desc);
 create index if not exists idx_leaderboard_entries_score_weekly_desc
   on public.leaderboard_entries (score_weekly desc);
+create index if not exists idx_leaderboard_entries_score_daily_desc
+  on public.leaderboard_entries (score_daily desc);
 create index if not exists idx_leaderboard_entries_bathroom_minutes_yearly_desc
   on public.leaderboard_entries (bathroom_minutes_yearly desc);
 create index if not exists idx_leaderboard_entries_poop_visits_per_day_desc

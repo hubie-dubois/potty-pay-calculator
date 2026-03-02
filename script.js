@@ -389,6 +389,10 @@ function initLeaderboard() {
       label: "Weekly Earnings",
       render: (entry) => Engine.money(Number(entry.score_weekly || 0))
     },
+    score_daily: {
+      label: "Daily Earnings",
+      render: (entry) => Engine.money(Number(entry.score_daily || 0))
+    },
     bathroom_minutes_yearly: {
       label: "Toilet Time/Year",
       render: (entry) => `${(Number(entry.bathroom_minutes_yearly || 0) / 60).toFixed(1)} h`
@@ -462,7 +466,7 @@ function initLeaderboard() {
 
     let query = supabase
       .from("leaderboard_entries")
-      .select("display_name,region,score_yearly,score_weekly,bathroom_minutes_yearly,visits_per_day,poop_visits_per_day,updated_at")
+      .select("display_name,region,score_yearly,score_weekly,score_daily,bathroom_minutes_yearly,visits_per_day,poop_visits_per_day,updated_at")
       .order(activeMetric, { ascending: false })
       .limit(25);
 
@@ -500,6 +504,10 @@ function initLeaderboard() {
 
     if (displayName.length < 2) {
       setMessage("Display name must be at least 2 characters.");
+      return;
+    }
+    if (region.length < 2) {
+      setMessage("Region must be at least 2 characters.");
       return;
     }
 

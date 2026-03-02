@@ -33,9 +33,11 @@ An interactive, multi-page static website for estimating how much people earn wh
   - Category rankings:
     - Yearly earnings
     - Weekly earnings
+    - Daily earnings
     - Toilet time per year
     - Total visits per day
     - Poop breaks per day
+  - Region is required for submissions
 - Theme system
   - Automatically follows visitor/browser `prefers-color-scheme` (light/dark)
 

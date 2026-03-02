@@ -46,6 +46,7 @@
         <div class="leaderboard-tabs" role="tablist" aria-label="Leaderboard metric tabs">
           <button class="chip lb-metric active" data-metric="score_yearly" type="button">Yearly Earnings</button>
           <button class="chip lb-metric" data-metric="score_weekly" type="button">Weekly Earnings</button>
+          <button class="chip lb-metric" data-metric="score_daily" type="button">Daily Earnings</button>
           <button class="chip lb-metric" data-metric="bathroom_minutes_yearly" type="button">Toilet Time/Year</button>
           <button class="chip lb-metric" data-metric="visits_per_day" type="button">Visits/Day</button>
           <button class="chip lb-metric" data-metric="poop_visits_per_day" type="button">Poop Breaks/Day</button>
@@ -100,8 +101,8 @@
               <input id="lbName" type="text" minlength="2" maxlength="24" value="Captain Flush" required />
             </label>
             <label>
-              Region (optional)
-              <input id="lbRegion" type="text" maxlength="24" value="USA" />
+              Region
+              <input id="lbRegion" type="text" minlength="2" maxlength="24" value="USA" required />
             </label>
             <label id="lbHourlyWrap">
               Hourly rate ($)
