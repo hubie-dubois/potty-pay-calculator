@@ -78,7 +78,7 @@ function initCalculatorPage() {
     workdaysPerWeek: document.getElementById("workdaysPerWeek"),
     minutesPerVisit: document.getElementById("minutesPerVisit"),
     visitsPerDay: document.getElementById("visitsPerDay"),
-    poopPercent: document.getElementById("poopPercent"),
+    poopVisitsPerDay: document.getElementById("poopVisitsPerDay"),
     weeksPerYear: document.getElementById("weeksPerYear")
   };
 
@@ -125,7 +125,7 @@ function initCalculatorPage() {
       workdaysPerWeek: Engine.readNum(inputs.workdaysPerWeek.value),
       minutesPerVisit: Engine.readNum(inputs.minutesPerVisit.value),
       visitsPerDay: Engine.readNum(inputs.visitsPerDay.value),
-      poopPercent: Engine.readNum(inputs.poopPercent.value),
+      poopVisitsPerDay: Engine.readNum(inputs.poopVisitsPerDay.value),
       weeksPerYear: Engine.readNum(inputs.weeksPerYear.value)
     };
   }
@@ -136,11 +136,6 @@ function initCalculatorPage() {
     salaryWrap.classList.toggle("hidden", isHourly);
     inputs.hourlyRate.required = isHourly;
     inputs.annualSalary.required = !isHourly;
-  }
-
-  function clampPoopPercent(value) {
-    if (!Number.isFinite(value)) return 0;
-    return Math.max(0, Math.min(100, value));
   }
 
   function renderLifetime() {
@@ -167,12 +162,12 @@ function initCalculatorPage() {
     output.month.textContent = Engine.money(metrics.perMonth);
     output.year.textContent = Engine.money(metrics.perYear);
 
-    const poopPct = clampPoopPercent(data.poopPercent);
+    const poopPct = data.visitsPerDay > 0 ? (data.poopVisitsPerDay / data.visitsPerDay) * 100 : 0;
     const peePct = 100 - poopPct;
     const poopYear = (metrics.perYear * poopPct) / 100;
     const peeYear = metrics.perYear - poopYear;
 
-    output.breakdown.textContent = `${Engine.money(poopYear)} from poop visits and ${Engine.money(peeYear)} from pee visits per year.`;
+    output.breakdown.textContent = `${Engine.money(poopYear)} from about ${data.poopVisitsPerDay} poop visit(s)/day and ${Engine.money(peeYear)} from pee visits per year.`;
     output.poopBar.style.width = `${poopPct}%`;
     output.peeBar.style.width = `${peePct}%`;
 
@@ -190,6 +185,15 @@ function initCalculatorPage() {
 
   function recalc() {
     const data = currentData();
+    if (!Number.isFinite(data.poopVisitsPerDay) || data.poopVisitsPerDay < 0) {
+      calcError.textContent = "Poop visits per workday must be 0 or greater.";
+      return;
+    }
+    if (data.poopVisitsPerDay > data.visitsPerDay) {
+      calcError.textContent = "Poop visits per workday cannot be greater than total visits per workday.";
+      return;
+    }
+
     const error = Engine.validateBase(data);
     calcError.textContent = error;
     if (error) return;
@@ -207,7 +211,7 @@ function initCalculatorPage() {
         workdaysPerWeek: 4,
         minutesPerVisit: 8,
         visitsPerDay: 2,
-        poopPercent: 30,
+        poopVisitsPerDay: 1,
         weeksPerYear: 48
       },
       classic: {
@@ -217,7 +221,7 @@ function initCalculatorPage() {
         workdaysPerWeek: 5,
         minutesPerVisit: 11,
         visitsPerDay: 3,
-        poopPercent: 35,
+        poopVisitsPerDay: 1,
         weeksPerYear: 50
       },
       grind: {
@@ -227,7 +231,7 @@ function initCalculatorPage() {
         workdaysPerWeek: 6,
         minutesPerVisit: 14,
         visitsPerDay: 4,
-        poopPercent: 40,
+        poopVisitsPerDay: 2,
         weeksPerYear: 50
       },
       chaos: {
@@ -237,7 +241,7 @@ function initCalculatorPage() {
         workdaysPerWeek: 5,
         minutesPerVisit: 9,
         visitsPerDay: 6,
-        poopPercent: 28,
+        poopVisitsPerDay: 2,
         weeksPerYear: 50
       }
     };
@@ -256,7 +260,7 @@ function initCalculatorPage() {
     inputs.workdaysPerWeek.value = String(preset.workdaysPerWeek);
     inputs.minutesPerVisit.value = String(preset.minutesPerVisit);
     inputs.visitsPerDay.value = String(preset.visitsPerDay);
-    inputs.poopPercent.value = String(preset.poopPercent);
+    inputs.poopVisitsPerDay.value = String(preset.poopVisitsPerDay);
     inputs.weeksPerYear.value = String(preset.weeksPerYear);
 
     setPayVisibility();
